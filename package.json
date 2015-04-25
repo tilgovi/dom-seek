@@ -24,5 +24,10 @@
   "homepage": "https://github.com/tilgovi/dom-text-walker",
   "devDependencies": {
     "babelify": "^6.0.2"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
   }
 }
