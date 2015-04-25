@@ -1,0 +1,28 @@
+{
+  "name": "dom-text-walker",
+  "version": "1.0.0",
+  "description": "seek(2) and tell(2) for DOM text",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tilgovi/dom-text-walker.git"
+  },
+  "keywords": [
+    "dom",
+    "text",
+    "annotation",
+    "range"
+  ],
+  "author": "Randall Leeds <randall@bleeds.info>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tilgovi/dom-text-walker/issues"
+  },
+  "homepage": "https://github.com/tilgovi/dom-text-walker",
+  "devDependencies": {
+    "babelify": "^6.0.2"
+  }
+}
