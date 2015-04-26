@@ -1,7 +1,7 @@
 {
   "name": "dom-text-walker",
   "version": "1.0.0",
-  "description": "seek(2) and tell(2) for DOM text",
+  "description": "lseek(2) for DOM text",
   "scripts": {
     "test": "npm test"
   },
@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/tilgovi/dom-text-walker",
   "devDependencies": {
-    "babelify": "^6.0.2"
+    "babelify": "^6.0.2",
+    "docme": "^0.3.0"
   },
   "browserify": {
     "transform": [

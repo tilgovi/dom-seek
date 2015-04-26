@@ -1,9 +1,12 @@
-/*
- * The `text-walker` module provides a single class, `TextWalker`, and
- * assocatied constants for seeking within the text content of a `Node` tree.
- */
+/** @module text-walker */
+
+/** Start seeking from the beginning of the text. */
 export const SEEK_SET = Symbol('SEEK_SET');
+
+/** Start seeking from the current position within the text. */
 export const SEEK_CUR = Symbol('SEEK_CUR');
+
+/** Start seeking from the end of the text. */
 export const SEEK_END = Symbol('SEEK_END');
 
 // A NodeFilter bitmask matching node types included by `Node.textContent`.
@@ -15,6 +18,16 @@ const TEXT_FILTER = (
 
 
 export class TextWalker {
+  /**
+   * The `TextWalker` class provides a seekable view over a `Node` tree.
+   * @class
+   * @param {Node} root The root `Node` of the tree to consider
+   * @param {Object} filter An `Object` containing a key, "acceptNode", that
+   * has a function value that accepts a `Node` and returns `true`
+   * or `false` to indicate whether the `Node` should be included when
+   * traversing the tree and counting text
+   * @memberof module:text-walker
+   */
   constructor(root, filter) {
     this.root = root;
     this.currentNode = root;
@@ -22,13 +35,18 @@ export class TextWalker {
     this.offset = 0;
   }
 
-  /*
+  /**
    * Seek the `TextWalker` to a new text offset.
    *
-   * The value of `whence` determines the meaning of `offset`. It may be one
-   * of `SEEK_SET`, `SEEK_CUR` or `SEEK_END`. The meaning is the same as for
-   * POSIX lseek(2) except that it is impossible to seek past the end of the
-   * text.
+   * @param {Symbol} whence one of
+   * [SEEK_SET]{@link module:text-walker.SEEK_SET},
+   * [SEEK_CUR]{@link module:text-walker.SEEK_CUR} or
+   * [SEEK_END]{@link module:text-walker.SEEK_END}. The meaning is the same as
+   * for POSIX lseek(2) except that it is impossible to seek past the end of
+   * the text
+   * @returns {Number} The offset of the last `Node` that contains the
+   * requested
+   * destination offset, as measured from the beginning of the text
    */
   seek(offset, whence = SEEK_SET) {
     let walker = document.createTreeWalker(this.root, TEXT_FILTER, this.filter);
