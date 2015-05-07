@@ -1,131 +1,157 @@
 /** @module text-walker */
 
-/** Start seeking from the beginning of the text. */
-export const SEEK_SET = Symbol('SEEK_SET');
+/* Internal constants */
 
-/** Start seeking from the current position within the text. */
-export const SEEK_CUR = Symbol('SEEK_CUR');
-
-/** Start seeking from the end of the text. */
-export const SEEK_END = Symbol('SEEK_END');
-
-// A NodeFilter bitmask matching node types included by `Node.textContent`.
-const TEXT_FILTER = (
-  NodeFilter.SHOW_ALL &
-  ~NodeFilter.SHOW_COMMENT &
-  ~NodeFilter.SHOW_PROCESSING_INSTRUCTION
-);
+const E_NODE = 'Argument 1 of TextIterator.seek is neither Element nor Text.';
+const E_TYPE = 'Argument 1 of TextIterator.seek is neither Numer nor Node.';
+const SEEKABLE_NODES = [Node.ELEMENT_NODE, Node.TEXT_NODE, Node.DOCUMENT_NODE];
 
 
-export class TextWalker {
-  /**
-   * The `TextWalker` class provides a seekable view over a `Node` tree.
-   * @class
-   * @param {Node} root The root `Node` of the tree to consider
-   * @param {Object} filter An `Object` containing a key, "acceptNode", that
-   * has a function value that accepts a `Node` and returns `true`
-   * or `false` to indicate whether the `Node` should be included when
-   * traversing the tree and counting text
-   * @memberof module:text-walker
-   */
-  constructor(root, filter) {
-    this.root = root;
-    this.currentNode = root;
-    this.filter = filter;
-    this.offset = 0;
-  }
+/* Public interface */
 
-  /**
-   * Seek the `TextWalker` to a new text offset.
-   *
-   * @param {Symbol} whence one of
-   * [SEEK_SET]{@link module:text-walker.SEEK_SET},
-   * [SEEK_CUR]{@link module:text-walker.SEEK_CUR} or
-   * [SEEK_END]{@link module:text-walker.SEEK_END}. The meaning is the same as
-   * for POSIX lseek(2) except that it is impossible to seek past the end of
-   * the text
-   * @returns {Number} The offset of the last `Node` that contains the
-   * requested
-   * destination offset, as measured from the beginning of the text
-   */
-  seek(offset, whence = SEEK_SET) {
-    let walker = document.createTreeWalker(this.root, TEXT_FILTER, this.filter);
+export class TextIterator {};
 
-    switch (whence) {
-    case SEEK_SET:
-      this.offset = 0;
-      walker.currentNode = this.root;
-      break;
-    case SEEK_CUR:
-      // XXX: Only two hard problems...
-      walker.currentNode = this.currentNode;
-      break;
-    case SEEK_END:
-        throw new Error('Seeking from the end not yet supported');
-    }
+export function createTextIterator(root, filter) {
+  let document = global.document;
+  let iter = document.createNodeIterator(root, NodeFilter.SHOW_TEXT, filter);
 
-    // Walk forwards
-    while (offset > 0) {
-      let step = walker.currentNode.textContent.length;
+  return Object.create(TextIterator.prototype, {
+    root: {
+      value: root
+    },
 
-      if (step > offset) {
-        // If this node is longer than the remainder to seek then step in to it.
-        if (walker.firstChild() === null) {
-          // If there is no smaller step to take then finish.
-          break;
+    whatToShow: {
+      value: NodeFilter.SHOW_TEXT
+    },
+
+    filter: {
+      value: filter
+    },
+
+    referenceNode: {
+      get: function () {
+        if (iter.referenceNode) {
+          return iter.referenceNode;
         } else {
-          // Otherwise, continue with the first child.
-          continue;
-        }
-      } else if (walker.nextSibling() === null) {
-        // If this node is not longer than the seek then try to step over it.
-        if (walker.nextNode() === null) {
-          // Failing that, step out or finish.
-          break;
+          // IE portability
+          iter.nextNode();
+          return iter.previousNode();
         }
       }
+    },
 
-      // Update the instance offset cache
-      this.offset += step;
+    seek: {
+      value: function (where) {
+        let self = this;
 
-      // Decrease the remainder offset and continue.
-      offset -= step;
-    }
-
-    // Walk backwards
-    while (offset < 0) {
-      throw new Error('Negative offset values not yet supported.');
-    }
-
-    // Store the current node
-    this.currentNode = walker.currentNode;
-
-    // Return the offset.
-    return this.offset;
-  }
-
-  tell() {
-    // Calculating the offset is the safest way to be correct even if the DOM
-    // has changed since this instance was created, but it is obviously slow.
-    let node = null;
-    let offset = 0;
-    let walker = document.createTreeWalker(this.root, TEXT_FILTER, this.filter);
-
-    // Start from the current node.
-    walker.currentNode = this.currentNode;
-
-    // Continue until reaching the root.
-    while (walker.currentNode !== walker.root) {
-      // Step backwards through siblings, to count the leading content.
-      while (node = walker.previousSibling()) {
-        offset += node.textContent.length;
+        if (!isNaN(parseInt(where)) && isFinite(where)) {
+          return seek_offset(iter, parseInt(where));
+        } else if (where.nodeType) {
+          if (SEEKABLE_NODES.indexOf(where.nodeType) !== -1) {
+            return seek_node(iter, where);
+          } else {
+            return Promise.reject(new TypeError(E_NODE));
+          }
+        } else {
+          return Promise.reject(new TypeError(E_TYPE));
+        }
       }
-      // Step up to the parent and continue until done.
-      walker.parentNode();
     }
+  });
+}
 
-    // Store and return the offset.
-    this.offset = offset
-    return this.offset
+
+export function install() {
+  let document = global.document;
+
+  if (typeof global.TextIterator === 'undefined') {
+    global.TextIterator = TextIterator;
   }
+
+  if (typeof document.createTextIterator === 'undefined') {
+    document.createTextIterator = createTextIterator;
+  }
+}
+
+
+/* Private implementation */
+
+
+function beforeEqualTo(referenceNode, node) {
+  return node === referenceNode ? true :
+    referenceNode.compareDocumentPosition(node) &
+    (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_CONTAINED_BY);
+}
+
+
+function afterEqualTo(referenceNode, node) {
+  return node === referenceNode ? true :
+    referenceNode.compareDocumentPosition(node) &
+    (Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_CONTAINS);
+}
+
+
+function seek_node(iter, node) {
+  function forward(current) {
+    let referenceNode = iter.nextNode();
+    if (referenceNode === null) {
+      return Promise.resolve(current);
+    } else {
+      current += referenceNode.textContent.length;
+      if (afterEqualTo(referenceNode, node)) {
+        return Promise.resolve(current);
+      } else {
+        return Promise.resolve(current).then(forward);
+      }
+    }
+  }
+
+  function backward(current) {
+    let referenceNode = iter.previousNode();
+    if (referenceNode === null) {
+      return Promise.resolve(current);
+    } else {
+      current -= referenceNode.textContent.length;
+      if (beforeEqualTo(referenceNode, node)) {
+        return Promise.resolve(current);
+      } else {
+        return Promise.resolve(current).then(backward);
+      }
+    }
+  }
+
+  return forward(0).then(backward);
+}
+
+
+function seek_offset(iter, offset) {
+  function forward(current) {
+    if (current >= offset) {
+      return Promise.resolve(current);
+    } else {
+      let referenceNode = iter.nextNode()
+      if (referenceNode === null) {
+        return Promise.resolve(current);
+      } else {
+        current += referenceNode.textContent.length;
+        return Promise.resolve(current).then(forward);
+      }
+    }
+  }
+
+  function backward(current) {
+    if (current <= offset) {
+      return Promise.resolve(current);
+    } else {
+      let referenceNode = iter.previousNode();
+      if (referenceNode === null) {
+        return Promise.resolve(current);
+      } else {
+        current -= referenceNode.textContent.length;
+        return Promise.resolve(current).then(backward);
+      }
+    }
+  }
+
+  return forward(0).then(backward);
 }
