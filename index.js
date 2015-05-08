@@ -1,5 +1,3 @@
-/** @module text-walker */
-
 /* Internal constants */
 
 const E_NODE = 'Argument 1 of TextIterator.seek is neither Element nor Text.';
