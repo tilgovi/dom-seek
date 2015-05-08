@@ -9,7 +9,7 @@ Installation
 
 Include as a script tag:
 
-    <script src="https://raw.githubusercontent.com/tilgovi/dom-seek/master/dist.js"></script>
+    <script src="https://raw.githubusercontent.com/tilgovi/dom-seek/master/seek.js"></script>
 
 Use with Browserify or WebPack:
 
