@@ -15,6 +15,9 @@ Use with Browserify or WebPack:
 
     npm install dom-seek
 
+Use with RequireJS or other AMD loaders by including the script as usual. It
+should properly detect your AMD environment and register itself as the `seek`
+module.
 
 Usage
 =====
