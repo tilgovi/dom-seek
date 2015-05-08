@@ -1,29 +1,27 @@
 {
-  "name": "dom-text-walker",
+  "name": "dom-seek",
   "version": "1.0.0",
-  "description": "lseek(2) for DOM text",
+  "description": "Text traversal for HTML documents.",
   "scripts": {
     "test": "npm test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tilgovi/dom-text-walker.git"
+    "url": "https://github.com/tilgovi/dom-seek.git"
   },
   "keywords": [
     "dom",
     "text",
-    "annotation",
-    "range"
+    "seek"
   ],
   "author": "Randall Leeds <randall@bleeds.info>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tilgovi/dom-text-walker/issues"
+    "url": "https://github.com/tilgovi/dom-seek/issues"
   },
-  "homepage": "https://github.com/tilgovi/dom-text-walker",
-  "devDependencies": {
-    "babelify": "^6.0.2",
-    "docme": "^0.3.0"
+  "homepage": "https://github.com/tilgovi/dom-seek",
+  "dependencies": {
+    "babelify": "^6.0.2"
   },
   "browserify": {
     "transform": [
