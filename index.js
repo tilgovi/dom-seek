@@ -77,45 +77,43 @@ export function install() {
 /* Private implementation */
 
 
-function beforeEqualTo(referenceNode, node) {
-  return node === referenceNode ? true :
-    referenceNode.compareDocumentPosition(node) &
+function before(referenceNode, node) {
+  return referenceNode.compareDocumentPosition(node) &
     (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_CONTAINED_BY);
 }
 
 
-function afterEqualTo(referenceNode, node) {
-  return node === referenceNode ? true :
-    referenceNode.compareDocumentPosition(node) &
+function after(referenceNode, node) {
+  return referenceNode.compareDocumentPosition(node) &
     (Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_CONTAINS);
 }
 
 
 function seek_node(iter, node) {
-  function forward(current) {
-    let referenceNode = iter.nextNode();
-    if (referenceNode === null) {
-      return Promise.resolve(current);
+  function forward(count) {
+    let curNode = iter.nextNode();
+    if (curNode === null) {
+      return Promise.resolve(count);
     } else {
-      current += referenceNode.textContent.length;
-      if (afterEqualTo(referenceNode, node)) {
-        return Promise.resolve(current);
+      count += curNode.textContent.length;
+      if (after(curNode, node)) {
+        return Promise.resolve(count);
       } else {
-        return Promise.resolve(current).then(forward);
+        return new Promise((r) => setTimeout(r, 0, count)).then(forward);
       }
     }
   }
 
-  function backward(current) {
-    let referenceNode = iter.previousNode();
-    if (referenceNode === null) {
-      return Promise.resolve(current);
+  function backward(count) {
+    let curNode = iter.previousNode();
+    if (curNode === null) {
+      return Promise.resolve(count);
     } else {
-      current -= referenceNode.textContent.length;
-      if (beforeEqualTo(referenceNode, node)) {
-        return Promise.resolve(current);
+      count -= curNode.textContent.length;
+      if(curNode === node || before(curNode, node)) {
+        return Promise.resolve(count);
       } else {
-        return Promise.resolve(current).then(backward);
+        return new Promise((r) => setTimeout(r, 0, count)).then(backward);
       }
     }
   }
@@ -125,30 +123,30 @@ function seek_node(iter, node) {
 
 
 function seek_offset(iter, offset) {
-  function forward(current) {
-    if (current >= offset) {
-      return Promise.resolve(current);
+  function forward(count) {
+    let curNode = iter.nextNode()
+    if (curNode === null) {
+      return Promise.resolve(count);
     } else {
-      let referenceNode = iter.nextNode()
-      if (referenceNode === null) {
-        return Promise.resolve(current);
+      count += curNode.textContent.length;
+      if (count > offset) {
+        return Promise.resolve(count);
       } else {
-        current += referenceNode.textContent.length;
-        return Promise.resolve(current).then(forward);
+        return new Promise((r) => setTimeout(r, 0, count)).then(forward);
       }
     }
   }
 
-  function backward(current) {
-    if (current <= offset) {
-      return Promise.resolve(current);
+  function backward(count) {
+    let curNode = iter.previousNode();
+    if (curNode === null) {
+      return Promise.resolve(count);
     } else {
-      let referenceNode = iter.previousNode();
-      if (referenceNode === null) {
-        return Promise.resolve(current);
+      count -= curNode.textContent.length;
+      if (count <= offset) {
+        return Promise.resolve(count);
       } else {
-        current -= referenceNode.textContent.length;
-        return Promise.resolve(current).then(backward);
+        return new Promise((r) => setTimeout(r, 0, count)).then(backward);
       }
     }
   }
