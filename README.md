@@ -23,9 +23,8 @@ The library provides a new type, `TextIterator` and a factory function,
 `createTextIterator`. These are accessible on the module object along with
 a polyfill installer, `install`.
 
-``` js
-var seek = require('dom-seek');
-```
+If you're using a module system, just `require('dom-seek')`, otherwise the
+`seek` namespace should be available globally after the script loads.
 
 ## `seek.install()`
 
