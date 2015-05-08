@@ -7,7 +7,7 @@ POSIX has `lseek(2)`. Now the browser has `dom-seek`.
 Installation
 ============
 
-Include as a script tag:
+Download or include `seek.js` or `seek.min.js` from this distribution:
 
     <script src="https://raw.githubusercontent.com/tilgovi/dom-seek/master/seek.js"></script>
 
