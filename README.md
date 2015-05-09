@@ -165,7 +165,7 @@ split(offset).then(function () {
   // Find the text node containing the end of the word.
   split(length).then(function () {
 
-    // Walk backward highlight all the nodes in between.
+    // Walk backward to the start and highlight all nodes.
     do {
       var node = iter.previousNode();
 
