@@ -27,15 +27,21 @@ export function createTextIterator(root, filter) {
   // Also, this keeps the NodeIterator private.
   return Object.create(TextIterator.prototype, {
     root: {
-      value: root
+      get: function () {
+        return iter.root;
+      }
     },
 
     whatToShow: {
-      value: NodeFilter.SHOW_TEXT
+      get: function () {
+        return iter.whatToShow;
+      }
     },
 
     filter: {
-      value: filter
+      get: function () {
+        return iter.filter;
+      }
     },
 
     referenceNode: {
