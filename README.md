@@ -136,7 +136,7 @@ split(offset).then(function (start) {
 
       node.parentNode.replaceChild(highlight, node);
       highlight.appendChild(node);
-    } while(node !== startNode);
+    } while(node !== start);
   });
 });
 ```
