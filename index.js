@@ -138,7 +138,7 @@ function seek_node(iter, node) {
       return Promise.resolve(count);
     } else {
       count += curNode.textContent.length;
-      if (after(curNode, node)) {
+      if (curNode === node || after(curNode, node)) {
         return Promise.resolve(count);
       } else {
         return new Promise((r) => setTimeout(r, 0, count)).then(forward);
@@ -171,7 +171,7 @@ function seek_offset(iter, offset) {
       return Promise.resolve(count);
     } else {
       count += curNode.textContent.length;
-      if (count > offset) {
+      if (count >= offset) {
         return Promise.resolve(count);
       } else {
         return new Promise((r) => setTimeout(r, 0, count)).then(forward);
