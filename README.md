@@ -96,22 +96,47 @@ until the reference node is either equal to the argument, when it is a
 Example
 =======
 
+Below is an example of using `TextIterator` to highlight a word in a document.
+The word may even be split across element boundaries.
+
 ```javascript
+// Install the polyfill
 seek.install();
 
-var where = document.body.textContent.indexOf('ipsum');
+// Find the start and end offsets of a word
+var offset = document.body.textContent.indexOf('ipsum');
+var length = 'ipsum'.length
+
+// Create a TextIterator
 var iter = document.createTextIterator(document.body);
 
-iter.seek(where).then(function (offset) {
-  var remainder = 512 - offset;
+// Seek the iterator forward by some amount, splitting the text node that
+// contains the destination offset if it does not fall exactly at the offset.
+// The result is a node that starts exactly at the requested offset.
+function split(offset) {
+  iter.seek(offset).then(function (count) {
+    if (count == offset) {
+      return iter.referenceNode;
+    } else {
+      // Split the text at the offset
+      return iter.referenceNode.splitText(offset - count);
+    }
+  });
+}
 
-  var text = iter.referenceNode.splitText(remainder);
-  text.splitText('ipsum'.length);
+// Find text nodes at the start and end of the word.
+split(offset).then(function (start) {
+  split(length).then(function (end) {
+    // Highlight all the nodes in between
+    do {
+      var node = iter.previousNode();
 
-  var highlight = document.createElement('<span>');
-  highlight.classList.add('highlight');
+      var highlight = document.createElement('<span>');
+      highlight.classList.add('highlight');
 
-  text.parentNode.replaceChild(highlight, text);
-  highlight.appendChild(text);
+      node.parentNode.replaceChild(highlight, node);
+      highlight.appendChild(node);
+    } while(node !== startNode);
+  });
 });
 ```
