@@ -100,14 +100,14 @@ Below is an example of using `TextIterator` to highlight a word in a document.
 The word may even be split across element boundaries.
 
 ```javascript
-// Install the polyfill
+// Install the polyfill.
 seek.install();
 
-// Find the start and end offsets of a word
+// Find the start word.
 var offset = document.body.textContent.indexOf('ipsum');
 var length = 'ipsum'.length
 
-// Create a TextIterator
+// Create a TextIterator.
 var iter = document.createTextIterator(document.body);
 
 // Seek the iterator forward by some amount, splitting the text node that
@@ -127,7 +127,7 @@ function split(offset) {
 // Find text nodes at the start and end of the word.
 split(offset).then(function (start) {
   split(length).then(function (end) {
-    // Highlight all the nodes in between
+    // Highlight all the nodes in between.
     do {
       var node = iter.previousNode();
 
