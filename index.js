@@ -132,63 +132,71 @@ function after(referenceNode, node) {
 function seek_node(iter, node) {
   function forward(count) {
     let curNode = iter.nextNode();
+
     if (curNode === null) {
       return Promise.resolve(count);
-    } else {
-      count += curNode.textContent.length;
-      if (curNode === node || after(curNode, node)) {
-        return Promise.resolve(count);
-      } else {
-        return new Promise((r) => setTimeout(r, 0, count)).then(forward);
-      }
     }
+
+    count += curNode.textContent.length;
+
+    if (after(curNode, node)) {
+      return Promise.resolve(count);
+    }
+
+    return new Promise((r) => setTimeout(r, 0, count)).then(forward);
   }
 
   function backward(count) {
     let curNode = iter.previousNode();
+
     if (curNode === null) {
       return Promise.resolve(count);
-    } else {
-      count -= curNode.textContent.length;
-      if(curNode === node || before(curNode, node)) {
-        return Promise.resolve(count);
-      } else {
-        return new Promise((r) => setTimeout(r, 0, count)).then(backward);
-      }
     }
+
+    count -= curNode.textContent.length;
+
+    if(curNode === node || before(curNode, node)) {
+      return Promise.resolve(count);
+    }
+
+    return new Promise((r) => setTimeout(r, 0, count)).then(backward);
   }
 
   return forward(0).then(backward);
 }
 
 
-function seek_offset(iter, offset) {
+function seek_offset(iter, predicates) {
   function forward(count) {
     let curNode = iter.nextNode()
+
     if (curNode === null) {
       return Promise.resolve(count);
-    } else {
-      count += curNode.textContent.length;
-      if (count >= offset) {
-        return Promise.resolve(count);
-      } else {
-        return new Promise((r) => setTimeout(r, 0, count)).then(forward);
-      }
     }
+
+    count += curNode.textContent.length;
+
+    if (count > offset) {
+      return Promise.resolve(count);
+    }
+
+    return new Promise((r) => setTimeout(r, 0, count)).then(forward);
   }
 
   function backward(count) {
     let curNode = iter.previousNode();
+
     if (curNode === null) {
       return Promise.resolve(count);
-    } else {
-      count -= curNode.textContent.length;
-      if (count <= offset) {
-        return Promise.resolve(count);
-      } else {
-        return new Promise((r) => setTimeout(r, 0, count)).then(backward);
-      }
     }
+
+    count -= curNode.textContent.length;
+
+    if (count <= offset) {
+      return Promise.resolve(count);
+    }
+
+    return new Promise((r) => setTimeout(r, 0, count)).then(backward);
   }
 
   return forward(0).then(backward);
