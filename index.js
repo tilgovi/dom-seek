@@ -80,6 +80,11 @@ export function createTextIterator(root, filter) {
 
     seek: {
       value: function (where) {
+        // Pre-condition: pointerBeforeReferenceNode
+        if (!this.pointerBeforeReferenceNode) {
+          this.previousNode();
+        }
+
         if (isNumber(where)) {
           return seek_offset(this, parseInt(where));
         } else if (isText(where)) {
