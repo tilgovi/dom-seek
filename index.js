@@ -5,12 +5,20 @@ const E_TYPE = 'Argument 1 of TextIterator.seek is neither a number nor Text.';
 
 /* Public interface */
 
-export class TextIterator {};
+export class TextIterator extends NodeIterator {};
 
 export function createTextIterator(root, filter) {
   let document = global.document;
   let iter = document.createNodeIterator(root, NodeFilter.SHOW_TEXT, filter);
 
+  // IE compatibility
+  if (typeof(iter.referenceNode === 'undefined')) {
+    iter.referenceNode = root;
+    iter.pointerBeforeReferenceNode = true;
+  }
+
+  // NodeIterator doesn't have a proper constructor so we don't either :(
+  // Also, this keeps the NodeIterator private.
   return Object.create(TextIterator.prototype, {
     root: {
       value: root
@@ -26,13 +34,41 @@ export function createTextIterator(root, filter) {
 
     referenceNode: {
       get: function () {
-        if (iter.referenceNode) {
-          return iter.referenceNode;
-        } else {
-          // IE portability
-          iter.nextNode();
-          return iter.previousNode();
+        return iter.referenceNode;
+      }
+    },
+
+    pointerBeforeReferenceNode: {
+      get: function () {
+        return iter.pointerBeforeReferenceNode;
+      }
+    },
+
+    nextNode: {
+      value: function () {
+        var result = iter.nextNode();
+
+        // IE compatibility
+        if (typeof(iter.referenceNode === 'undefined')) {
+          iter.referenceNode = result;
+          iter.pointerBeforeReferenceNode = false;
         }
+
+        return result;
+      }
+    },
+
+    previousNode: {
+      value: function () {
+        var result = iter.previousNode();
+
+        // IE compatibility
+        if (typeof(iter.referenceNode === 'undefined')) {
+          iter.referenceNode = result;
+          iter.pointerBeforeReferenceNode = true;
+        }
+
+        return result;
       }
     },
 
