@@ -56,6 +56,8 @@ An object with a method for accepting nodes for inclusion in the iteration.
 </dd>
 </dl>
 
+The `root` node must be an `Element`.
+
 If supplied, `filter` should be an object with an `acceptNode` method
 that takes as its argument a `Node`, returning `true` if the node should
 be included in the traversal and `false` otherwise.

@@ -1,6 +1,7 @@
 /* Internal constants */
 
-const E_TYPE = 'Argument 1 of TextIterator.seek is neither a number nor Text.';
+const E_ROOT = 'Argument 1 of createTextIterator is not an Element.';
+const E_SEEK = 'Argument 1 of TextIterator.seek is neither a number nor Text.';
 
 
 /* Public interface */
@@ -9,6 +10,11 @@ export class TextIterator extends NodeIterator {};
 
 export function createTextIterator(root, filter) {
   let document = global.document;
+
+  if (root.nodeType !== Node.ELEMENT_NODE) {
+    throw new UnsupportedError(E_ROOT);
+  }
+
   let iter = document.createNodeIterator(root, NodeFilter.SHOW_TEXT, filter);
 
   // IE compatibility
@@ -79,7 +85,7 @@ export function createTextIterator(root, filter) {
         } else if (isText(where)) {
           return seek_node(this, where);
         } else {
-          return Promise.reject(new TypeError(E_TYPE));
+          return Promise.reject(new UnsupportedError(E_SEEK));
         }
       }
     }
