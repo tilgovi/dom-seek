@@ -109,7 +109,7 @@ even if that string is split across element boundaries.
 // Install the polyfill.
 seek.install();
 
-// Find the start word.
+// Find the text.
 var offset = document.body.textContent.indexOf('ipsum');
 var length = 'ipsum'.length
 
@@ -118,7 +118,6 @@ var iter = document.createTextIterator(document.body);
 
 // Seek the iterator forward by some amount, splitting the text node that
 // contains the destination offset if it does not fall exactly at the offset.
-// The result is a node that starts exactly at the requested offset.
 function split(offset) {
   return iter.seek(offset).then(function (count) {
     if (count != offset) {
