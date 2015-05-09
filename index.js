@@ -106,7 +106,7 @@ export function install() {
 
 
 function isNumber(n) {
-  return !isNaN(parseInt(n)) && isFinite(n));
+  return !isNaN(parseInt(n)) && isFinite(n);
 }
 
 
