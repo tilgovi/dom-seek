@@ -172,7 +172,7 @@ function seek_node(iter, node) {
 }
 
 
-function seek_offset(iter, predicates) {
+function seek_offset(iter, offset) {
   function forward(count) {
     let curNode = iter.nextNode()
 
