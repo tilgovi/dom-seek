@@ -120,24 +120,26 @@ var iter = document.createTextIterator(document.body);
 // contains the destination offset if it does not fall exactly at the offset.
 // The result is a node that starts exactly at the requested offset.
 function split(offset) {
-  iter.seek(offset).then(function (count) {
-    if (count == offset) {
-      return iter.referenceNode;
-    } else {
+  return iter.seek(offset).then(function (count) {
+    if (count != offset) {
       // Split the text at the offset
-      return iter.referenceNode.splitText(offset - count);
+      iter.nextNode().splitText(offset - count);
     }
   });
 }
 
-// Find text nodes at the start and end of the word.
-split(offset).then(function (start) {
-  split(length).then(function (end) {
-    // Highlight all the nodes in between.
+// Find text node containing the start of the word.
+split(offset).then(function () {
+  var start = iter.nextNode();
+
+  // Find the text node containing the end of the word.
+  split(length).then(function () {
+
+    // Walk backward highlight all the nodes in between.
     do {
       var node = iter.previousNode();
 
-      var highlight = document.createElement('<span>');
+      var highlight = document.createElement('span');
       highlight.classList.add('highlight');
 
       node.parentNode.replaceChild(highlight, node);
