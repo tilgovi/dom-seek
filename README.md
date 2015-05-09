@@ -158,14 +158,14 @@ function split(offset) {
   });
 }
 
-// Find text node containing the start of the word.
+// Find the text node containing the start of the word.
 split(offset).then(function () {
   var start = iter.nextNode();
 
   // Find the text node containing the end of the word.
   split(length).then(function () {
 
-    // Walk backward to the start and highlight all nodes.
+    // Walk backward to the start and highlight all the nodes.
     do {
       var node = iter.previousNode();
 
