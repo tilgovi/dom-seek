@@ -1,8 +1,6 @@
 /* Internal constants */
 
-const E_NODE = 'Argument 1 of TextIterator.seek is neither Element nor Text.';
-const E_TYPE = 'Argument 1 of TextIterator.seek is neither Numer nor Node.';
-const SEEKABLE_NODES = [Node.ELEMENT_NODE, Node.TEXT_NODE, Node.DOCUMENT_NODE];
+const E_TYPE = 'Argument 1 of TextIterator.seek is neither a number nor Text.';
 
 
 /* Public interface */
@@ -42,14 +40,10 @@ export function createTextIterator(root, filter) {
       value: function (where) {
         let self = this;
 
-        if (!isNaN(parseInt(where)) && isFinite(where)) {
+        if (isNumber(where)) {
           return seek_offset(iter, parseInt(where));
-        } else if (where.nodeType) {
-          if (SEEKABLE_NODES.indexOf(where.nodeType) !== -1) {
-            return seek_node(iter, where);
-          } else {
-            return Promise.reject(new TypeError(E_NODE));
-          }
+        } else if (isText(where)) {
+          return seek_node(iter, where);
         } else {
           return Promise.reject(new TypeError(E_TYPE));
         }
@@ -73,6 +67,20 @@ export function install() {
 
 
 /* Private implementation */
+
+
+function isNumber(n) {
+  return !isNaN(parseInt(n)) && isFinite(n));
+}
+
+
+function isText(node) {
+  if (typeof(node.nodeType) === 'number') {
+    return node.nodeType === Node.TEXT_NODE;
+  } else {
+    return false;
+  }
+}
 
 
 function before(referenceNode, node) {
