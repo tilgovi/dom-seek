@@ -34,7 +34,7 @@ If you're using a module system, just `require('dom-seek')`, otherwise the
 Installs the polyfill, with `seek.createTextIterator` on `document`
 and `seek.TextIterator` on the global object.
 
-## `seek.createTextIterator(root, [filter])`
+## `createTextIterator(root, [filter])`
 
 Creates a new instance of `TextIterator`.
 
@@ -62,13 +62,44 @@ If supplied, `filter` should be an object with an `acceptNode` method
 that takes as its argument a `Node`, returning `true` if the node should
 be included in the traversal and `false` otherwise.
 
-## `seek.TextIterator.referenceNode`
+## `TextIterator.root`
+
+A read-only property that returns the `root` node passed to the invocation of
+`createTextIterator`.
+
+## `TextIterator.whatToShow`
+
+A read-only property that always returns `NodeFilter.SHOW_TEXT`.
+
+## `TextIterator.filter`
+
+A read-only property that returns the `filter` argument passed to the
+invocation of `createTextIterator` or `null` if no argument was passed.
+
+## `TextIterator.referenceNode`
 
 The current node for the iterator. When first initialized, this will
 be the root node for the iteration, but after seeking it will always
 be a `Text` node.
 
-## `seek.TextIterator.prototype.seek(where)`
+## `TextIterator.pointerBeforeReferenceNode`
+
+A read-only property that is `true` when the iterator is positioned after
+the `reference node` and `false` otherwise. At initialization, the value
+is `true`. After seeking, the value is always `true`. It may be `false` if
+the iterator is advanced by a call to `nextNode`.
+
+## `TextIterator.prototype.nextNode()`
+
+Advance the iterator so that the next text node is the next succeeding text node
+and return the new `reference node`.
+
+## `TextIterator.prototype.previousNode()`
+
+Rewind the iterator so that the reference node is the next preceding text node
+and return the new `reference node`.
+
+## `TextIterator.prototype.seek(where)`
 
 Returns a `Promise` that will be fulfilled with the number of characters
 traversed.
