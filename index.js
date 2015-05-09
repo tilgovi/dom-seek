@@ -74,12 +74,10 @@ export function createTextIterator(root, filter) {
 
     seek: {
       value: function (where) {
-        let self = this;
-
         if (isNumber(where)) {
-          return seek_offset(iter, parseInt(where));
+          return seek_offset(this, parseInt(where));
         } else if (isText(where)) {
-          return seek_node(iter, where);
+          return seek_node(this, where);
         } else {
           return Promise.reject(new TypeError(E_TYPE));
         }
