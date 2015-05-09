@@ -98,8 +98,12 @@ until the reference node is either equal to the argument, when it is a
 Example
 =======
 
-Below is an example of using `TextIterator` to highlight a word in a document.
-The word may even be split across element boundaries.
+Often, when searching for text strings in HTML documents, authors will traverse
+document and look at the text of the leaf Elements. However, when the search
+pattern is split across element boundaries, the problem is harder.
+
+Below is an example of using `TextIterator` to highlight a string in a document,
+even if that string is split across element boundaries.
 
 ```javascript
 // Install the polyfill.
