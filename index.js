@@ -12,7 +12,7 @@ export function createTextIterator(root, filter) {
   let iter = document.createNodeIterator(root, NodeFilter.SHOW_TEXT, filter);
 
   // IE compatibility
-  if (typeof(iter.referenceNode === 'undefined')) {
+  if (typeof(iter.referenceNode) === 'undefined') {
     iter.referenceNode = root;
     iter.pointerBeforeReferenceNode = true;
   }
@@ -49,7 +49,7 @@ export function createTextIterator(root, filter) {
         var result = iter.nextNode();
 
         // IE compatibility
-        if (typeof(iter.referenceNode === 'undefined')) {
+        if (typeof(iter.referenceNode) === 'undefined') {
           iter.referenceNode = result;
           iter.pointerBeforeReferenceNode = false;
         }
@@ -63,7 +63,7 @@ export function createTextIterator(root, filter) {
         var result = iter.previousNode();
 
         // IE compatibility
-        if (typeof(iter.referenceNode === 'undefined')) {
+        if (typeof(iter.referenceNode) === 'undefined') {
           iter.referenceNode = result;
           iter.pointerBeforeReferenceNode = true;
         }
