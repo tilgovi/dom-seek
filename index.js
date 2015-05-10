@@ -3,6 +3,9 @@
 const E_ROOT = 'Argument 1 of createTextIterator is not an Element.';
 const E_SEEK = 'Argument 1 of TextIterator.seek is neither a number nor Text.';
 
+const FRAME_RATE = 60;
+const TICK_LENGTH = 1000 / FRAME_RATE;
+
 
 /* Public interface */
 
@@ -147,6 +150,8 @@ function after(referenceNode, node) {
 
 
 function seek_node(iter, node) {
+  var yieldAt = Date.now() + TICK_LENGTH;
+
   function forward(count) {
     let curNode = iter.nextNode();
 
@@ -160,7 +165,16 @@ function seek_node(iter, node) {
       return Promise.resolve(count);
     }
 
-    return new Promise((r) => setTimeout(r, 0, count)).then(forward);
+    if (Date.now() < yieldAt) {
+      return forward(count)
+    } else {
+      return new Promise((resolve) => {
+        requestAnimationFrame(() => {
+          yieldAt = Date.now() + TICK_LENGTH;
+          resolve(forward(count));
+        });
+      });
+    }
   }
 
   function backward(count) {
@@ -176,7 +190,16 @@ function seek_node(iter, node) {
       return Promise.resolve(count);
     }
 
-    return new Promise((r) => setTimeout(r, 0, count)).then(backward);
+    if (Date.now() < yieldAt) {
+      return backward(count)
+    } else {
+      return new Promise((resolve) => {
+        requestAnimationFrame(() => {
+          yieldAt = Date.now() + TICK_LENGTH;
+          resolve(backward(count));
+        });
+      });
+    }
   }
 
   return forward(0).then(backward);
@@ -184,6 +207,8 @@ function seek_node(iter, node) {
 
 
 function seek_offset(iter, offset) {
+  var yieldAt = Date.now() + TICK_LENGTH;
+
   function forward(count) {
     let curNode = iter.nextNode()
 
@@ -197,7 +222,16 @@ function seek_offset(iter, offset) {
       return Promise.resolve(count);
     }
 
-    return new Promise((r) => setTimeout(r, 0, count)).then(forward);
+    if (Date.now() < yieldAt) {
+      return forward(count)
+    } else {
+      return new Promise((resolve) => {
+        requestAnimationFrame(() => {
+          yieldAt = Date.now() + TICK_LENGTH;
+          resolve(forward(count));
+        });
+      });
+    }
   }
 
   function backward(count) {
@@ -213,7 +247,16 @@ function seek_offset(iter, offset) {
       return Promise.resolve(count);
     }
 
-    return new Promise((r) => setTimeout(r, 0, count)).then(backward);
+    if (Date.now() < yieldAt) {
+      return backward(count)
+    } else {
+      return new Promise((resolve) => {
+        requestAnimationFrame(() => {
+          yieldAt = Date.now() + TICK_LENGTH;
+          resolve(backward(count));
+        });
+      });
+    }
   }
 
   return forward(0).then(backward);
