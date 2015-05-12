@@ -3,6 +3,21 @@ DOM Seek
 
 POSIX has `lseek(2)`. Now the browser has `dom-seek`.
 
+This library can answer two kinds of questions about character offsets in a
+document:
+
+- Given a `Node`, at what offset does its text content start?
+
+- Given an offset, in which `Node` can I find that text?
+
+Both questions are answered by a `TextIterator` which can move forward,
+backward or to a destination `Node`, responding with the number of characters
+traversed.
+
+It is especially useful for dealing with text that breaks across elements,
+since it handles traversal and let's you think instead in terms of text
+position.
+
 
 Installation
 ============
