@@ -10,7 +10,7 @@ document:
 
 - Given an offset, in which `Node` can I find that text?
 
-Both questions are answered by a `TextIterator` which can move forward,
+Both questions are answered by a `TextIterator` that can move forward,
 backward or to a destination `Node`, responding with the number of characters
 traversed.
 
