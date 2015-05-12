@@ -22,17 +22,18 @@ position.
 Installation
 ============
 
-Download or include `seek.js` or `seek.min.js` from this distribution:
+There are a few different ways to include the library.
 
-    <script src="https://raw.githubusercontent.com/tilgovi/dom-seek/master/seek.js"></script>
-
-Use with Browserify or WebPack:
+With a CommonJS bundler to `require('dom-seek')`:
 
     npm install dom-seek
 
-Use with RequireJS or other AMD loaders by including the script as usual. It
-should properly detect your AMD environment and register itself as the `seek`
-module.
+With a script tag, include `seek.js` or `seek.min.js`:
+
+    <script src="https://raw.githubusercontent.com/tilgovi/dom-seek/master/seek.js"></script>
+
+With RequireJS or other AMD loaders: include `seek.js`. It should properly
+detect your AMD environment and register itself as the `seek` module.
 
 Usage
 =====
