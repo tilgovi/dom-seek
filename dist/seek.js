@@ -6,8 +6,6 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.to = to;
 exports.by = by;
-/* Internal constants */
-
 var E_SEEK = 'Argument 1 of seek is neither a number nor Text Node.';
 var E_SHOW = 'NodeIterator.whatToShow is not NodeFilter.SHOW_TEXT.';
 
@@ -22,7 +20,7 @@ function after(referenceNode, node) {
   return referenceNode.compareDocumentPosition(node) & (Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_CONTAINS);
 }
 
-function check(iter) {
+function checkPreconditions(iter) {
   if (iter.whatToShow !== NodeFilter.SHOW_TEXT) {
     return Promise.reject(new Error(E_SHOW));
   }
@@ -33,7 +31,7 @@ function check(iter) {
   }
 }
 
-function to(iter, node) {
+function seek(iter, predicates) {
   var yieldAt = Date.now() + TICK_LENGTH;
 
   function forward(_x) {
@@ -52,7 +50,7 @@ function to(iter, node) {
 
       count += curNode.textContent.length;
 
-      if (after(curNode, node)) {
+      if (predicates.forward(curNode, count)) {
         return Promise.resolve(count);
       }
 
@@ -87,7 +85,7 @@ function to(iter, node) {
 
       count -= curNode.textContent.length;
 
-      if (curNode === node || before(curNode, node)) {
+      if (predicates.backward(curNode, count)) {
         return Promise.resolve(count);
       }
 
@@ -106,85 +104,31 @@ function to(iter, node) {
     }
   }
 
-  check(iter);
   return forward(0).then(backward);
 }
 
+function to(iter, node) {
+  checkPreconditions(iter);
+  return seek(iter, {
+    forward: function forward(curNode, _) {
+      return after(curNode, node);
+    },
+    backward: function backward(curNode, _) {
+      return curNode === node || before(curNode, node);
+    }
+  });
+}
+
 function by(iter, offset) {
-  var yieldAt = Date.now() + TICK_LENGTH;
-
-  function forward(_x3) {
-    var _again3 = true;
-
-    _function3: while (_again3) {
-      curNode = undefined;
-      _again3 = false;
-      var count = _x3;
-
-      var curNode = iter.nextNode();
-
-      if (curNode === null) {
-        return Promise.resolve(count);
-      }
-
-      count += curNode.textContent.length;
-
-      if (count > offset) {
-        return Promise.resolve(count);
-      }
-
-      if (Date.now() < yieldAt) {
-        _x3 = count;
-        _again3 = true;
-        continue _function3;
-      } else {
-        return new Promise(function (resolve) {
-          requestAnimationFrame(function () {
-            yieldAt = Date.now() + TICK_LENGTH;
-            resolve(forward(count));
-          });
-        });
-      }
+  checkPreconditions(iter);
+  return seek(iter, {
+    forward: function forward(_, count) {
+      return count > offset;
+    },
+    backward: function backward(_, count) {
+      return count <= offset;
     }
-  }
-
-  function backward(_x4) {
-    var _again4 = true;
-
-    _function4: while (_again4) {
-      curNode = undefined;
-      _again4 = false;
-      var count = _x4;
-
-      var curNode = iter.previousNode();
-
-      if (curNode === null) {
-        return Promise.resolve(count);
-      }
-
-      count -= curNode.textContent.length;
-
-      if (count <= offset) {
-        return Promise.resolve(count);
-      }
-
-      if (Date.now() < yieldAt) {
-        _x4 = count;
-        _again4 = true;
-        continue _function4;
-      } else {
-        return new Promise(function (resolve) {
-          requestAnimationFrame(function () {
-            yieldAt = Date.now() + TICK_LENGTH;
-            resolve(backward(count));
-          });
-        });
-      }
-    }
-  }
-
-  check(iter);
-  return forward(0).then(backward);
+  });
 }
 
 },{}]},{},[1])(1)
