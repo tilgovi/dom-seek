@@ -60,21 +60,28 @@ describe('seek', function () {
   });
 
   describe('by a number', function () {
+    let iter = null;
+
+    beforeEach(function () {
+      iter = createIter();
+    });
+
+    afterEach(function () {
+      assert.isTrue(iter.pointerBeforeReferenceNode);
+    });
+
     it('accepts zero as an argument', function () {
-      let iter = createIter();
       assert.doesNotThrow(() => seek(iter, 0));
     });
 
     describe('when traversing past the beginning', function () {
       it('stops', function () {
-        let iter = createIter();
         let count = seek(iter, -100);
         assert.equal(count, 0);
       });
 
       it('ends on a text node', function () {
         let text = fixture.el.childNodes[0].childNodes[0].childNodes[0];
-        let iter = createIter();
         let count = seek(iter, -100);
         assert.strictEqual(iter.referenceNode, text);
       });
@@ -84,7 +91,6 @@ describe('seek', function () {
       it('stops', function () {
         let p = fixture.el.childNodes[0];
         let text = p.childNodes[p.childNodes.length-1];
-        let iter = createIter();
         let count = seek(iter, fixture.el.textContent.length + 100);
         assert.strictEqual(iter.referenceNode, text);
       });
@@ -93,7 +99,6 @@ describe('seek', function () {
     it('seeks to that offset if it marks the start of a node', function () {
       let text = 'Aenean ultricies mi vitae est.'
       let offset = fixture.el.textContent.indexOf(text);
-      let iter = createIter();
       let count = seek(iter, offset);
       assert.equal(count, offset);
       assert.equal(iter.referenceNode.textContent, text);
@@ -102,7 +107,6 @@ describe('seek', function () {
     it('seeks to the nearest node', function () {
       let text = 'Aenean ultricies mi vitae est.'
       let offset = fixture.el.textContent.indexOf(text);
-      let iter = createIter();
       let count = seek(iter, offset + 5);
       assert.equal(count, offset);
       assert.equal(iter.referenceNode.textContent, text);
@@ -111,7 +115,6 @@ describe('seek', function () {
     it('seeks forwards and backwards', function () {
       let text = 'commodo vitae'
       let offset = fixture.el.textContent.indexOf(text);
-      let iter = createIter();
       let end = seek(iter, offset + text.length);
       let count = seek(iter, -text.length);
       assert.equal(count, -text.length);
