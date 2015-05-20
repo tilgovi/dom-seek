@@ -3,15 +3,15 @@ module.exports = function(config) {
     browsers: ['PhantomJS'],
     frameworks: ['browserify', 'chai', 'mocha', 'source-map-support'],
     files: [
-      'test.es6.js'
+      'test/*.spec.es6.js'
     ],
     reporters: ['progress', 'coverage'],
     preprocessors: {
-      'test.es6.js': ['browserify']
+      'test/*.spec.es6.js': ['browserify']
     },
     browserify: {
       debug: true,
-      transform: ['babelify', ['browserify-istanbul', {ignore: ['**/test*']}]]
+      transform: ['babelify', 'browserify-istanbul']
     },
     coverageReporter: {
       reporters: [

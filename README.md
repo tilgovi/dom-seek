@@ -73,9 +73,9 @@ var iter = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT);
 // contains the destination if it does not fall exactly at a text node boundary.
 function split(where) {
   var count = seek(iter, where);
-  if (count != offset) {
+  if (count != where) {
     // Split the text at the offset
-    iter.referenceNode.splitText(offset - count);
+    iter.referenceNode.splitText(where - count);
     iter.nextNode();
   }
 }
