@@ -3,7 +3,6 @@ module.exports = function(config) {
     browsers: ['PhantomJS'],
     frameworks: ['browserify', 'chai', 'mocha', 'source-map-support'],
     files: [
-      './node_modules/es6-promise/dist/es6-promise.js',
       'test.es6.js'
     ],
     reporters: ['progress', 'coverage'],

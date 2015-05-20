@@ -28,7 +28,6 @@
     "browserify": "^10.2.1",
     "browserify-istanbul": "^0.2.1",
     "chai": "^2.3.0",
-    "es6-promise": "^2.1.1",
     "karma": "^0.12.32",
     "karma-browserify": "^4.1.2",
     "karma-chai": "^0.1.0",

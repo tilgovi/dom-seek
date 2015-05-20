@@ -48,8 +48,7 @@ reference node is either equal to the argument, when the argument is a `Text`
 node, or the `Text` node that immediately precedes the first `Text` node
 contained by the argument, when the argument is an `Element`.
 
-Returns a `Promise` that will be fulfilled with the number of characters
-traversed.
+Returns the number of characters traversed.
 
 Example
 =======
@@ -71,33 +70,28 @@ var length = 'ipsum'.length
 var iter = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT);
 
 // Seek the iterator forward by some amount, splitting the text node that
-// contains the destination offset if it does not fall exactly at the offset.
-function split(offset) {
-  return seek(iter, offset).then(function (count) {
-    if (count != offset) {
-      // Split the text at the offset
-      iter.nextNode().splitText(offset - count);
-    }
-  });
+// contains the destination if it does not fall exactly at a text node boundary.
+function split(where) {
+  var count = seek(iter, where);
+  if (count != offset) {
+    // Split the text at the offset
+    iter.referenceNode.splitText(offset - count);
+    iter.nextNode();
+  }
 }
 
-// Find the text node containing the start of the word.
-split(offset).then(function () {
-  var start = iter.nextNode();
+// Find split points
+split(offset);
+split(length);
 
-  // Find the text node containing the end of the word.
-  split(length).then(function () {
+// Walk backward to the start and highlight all the nodes.
+do {
+  var node = iter.previousNode();
 
-    // Walk backward to the start and highlight all the nodes.
-    do {
-      var node = iter.previousNode();
+  var highlight = document.createElement('span');
+  highlight.classList.add('highlight');
 
-      var highlight = document.createElement('span');
-      highlight.classList.add('highlight');
-
-      node.parentNode.replaceChild(highlight, node);
-      highlight.appendChild(node);
-    } while(node !== start);
-  });
-});
+  node.parentNode.replaceChild(highlight, node);
+  highlight.appendChild(node);
+} while(node !== start);
 ```
