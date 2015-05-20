@@ -1,8 +1,12 @@
+const E_ITER = 'Argument 1 of seek must be a NodeIterator.';
 const E_SHOW = 'Argument 1 of seek must use filter NodeFilter.SHOW_TEXT.';
-const E_SEEK = 'Argument 2 of seek is neither a number nor Text Node.';
+const E_WHERE = 'Argument 2 of seek must be a number or a Text Node.';
 
 
 export default function seek(iter, where) {
+  if (!(iter instanceof NodeIterator)) {
+    throw new Error(E_ITER);
+  }
 
   if (iter.whatToShow !== NodeFilter.SHOW_TEXT) {
     throw new Error(E_SHOW);
@@ -23,7 +27,7 @@ export default function seek(iter, where) {
       backward: () => after(node, where)
     };
   } else {
-    throw new Error(E_SEEK);
+    throw new Error(E_WHERE);
   }
 
   if (iter.pointerBeforeReferenceNode) {
