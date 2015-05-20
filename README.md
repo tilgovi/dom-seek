@@ -10,11 +10,6 @@ document:
 
 - Given an offset, in which `Node` can I find that text?
 
-It is especially useful for dealing with text that breaks across elements,
-since it handles traversal and let's you think instead in terms of text
-position.
-
-
 Installation
 ============
 
