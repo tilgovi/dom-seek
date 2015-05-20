@@ -56,8 +56,9 @@ Below is an example of using `seek` to highlight a string in a document, even
 if that string is split across element boundaries.
 
 ```javascript
-// Find the text.
 var text = 'ipsum';
+
+// Find the text.
 var offset = document.body.textContent.indexOf(text);
 var length = text.length
 
@@ -71,6 +72,8 @@ function split(where) {
   if (count != where) {
     // Split the text at the offset
     iter.referenceNode.splitText(where - count);
+
+    // Seek to the exact offset.
     seek(iter, where - count);
   }
   return iter.referenceNode;
@@ -78,17 +81,17 @@ function split(where) {
 
 // Find split points
 var start = split(offset);
-split(length);
+var end = split(length);
 
-// Turn around
-iter.previousNode();
+// Walk backwards, collecting all the nodes
+var nodes = [];
+while (iter.referenceNode !== start) {
+  nodes.push(iter.previousNode());
+}
 
-// Walk backward to the start, highlighting all the text nodes.
-do {
-  var node = iter.referenceNode;
-
-  // Advance before highlighting so we don't confuse the iterator.
-  iter.previousNode();
+// Highlight all the nodes.
+for (var i = 0 ; i < nodes.length ; i++) {
+  var node = nodes[i];
 
   // Create a highlight
   var highlight = document.createElement('span');
@@ -97,5 +100,5 @@ do {
   // Wrap it around the text node
   node.parentNode.replaceChild(highlight, node);
   highlight.appendChild(node);
-} while (node !== start);
+}
 ```
