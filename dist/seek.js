@@ -9,27 +9,30 @@ var E_SHOW = 'Argument 1 of seek must use filter NodeFilter.SHOW_TEXT.';
 var E_SEEK = 'Argument 2 of seek is neither a number nor Text Node.';
 
 function seek(iter, where) {
-  var predicates = null;
 
   if (iter.whatToShow !== NodeFilter.SHOW_TEXT) {
     throw new Error(E_SHOW);
   }
 
+  var count = 0;
+  var node = null;
+  var predicates = null;
+
   if (isNumber(where)) {
     predicates = {
-      forward: function forward(_, count) {
+      forward: function forward() {
         return count <= where;
       },
-      backward: function backward(_, count) {
+      backward: function backward() {
         return count > where;
       }
     };
   } else if (isText(where)) {
     predicates = {
-      forward: function forward(node, _) {
+      forward: function forward() {
         return node === where || before(node, where);
       },
-      backward: function backward(node, _) {
+      backward: function backward() {
         return after(node, where);
       }
     };
@@ -37,23 +40,23 @@ function seek(iter, where) {
     throw new Error(E_SEEK);
   }
 
-  if (!iter.pointerBeforeReferenceNode) {
-    iter.previousNode();
+  if (iter.pointerBeforeReferenceNode) {
+    node = iter.referenceNode;
+  } else {
+    node = iter.previousNode();
   }
 
-  var count = 0;
+  do {
+    node = iter.nextNode();
+    if (node === null) break;
+    count += node.textContent.length;
+  } while (predicates.forward());
 
   do {
-    var _curNode = iter.nextNode();
-    if (_curNode === null) break;
-    count += _curNode.textContent.length;
-  } while (predicates.forward(curNode, count));
-
-  do {
-    var _curNode2 = iter.previousNode();
-    if (_curNode2 === null) break;
-    count -= _curNode2.textContent.length;
-  } while (predicates.backward(curNode, count));
+    node = iter.previousNode();
+    if (node === null) break;
+    count -= node.textContent.length;
+  } while (predicates.backward());
 
   return count;
 }
