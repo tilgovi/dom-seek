@@ -58,8 +58,8 @@ Often, when searching for text strings in HTML documents, authors will traverse
 a document and look at the text of the leaf Elements. However, when the search
 pattern is split across element boundaries, the problem is harder.
 
-Below is an example of using `TextIterator` to highlight a string in a document,
-even if that string is split across element boundaries.
+Below is an example of using `seek` to highlight a string in a document, even
+if that string is split across element boundaries.
 
 ```javascript
 
