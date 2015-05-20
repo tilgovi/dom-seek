@@ -5,15 +5,21 @@ const FRAME_RATE = 60;
 const TICK_LENGTH = 1000 / FRAME_RATE;
 
 
-function before(referenceNode, node) {
-  return referenceNode.compareDocumentPosition(node) &
-    (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_CONTAINED_BY);
-}
-
-
-function after(referenceNode, node) {
-  return referenceNode.compareDocumentPosition(node) &
-    (Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_CONTAINS);
+export default function seek(iter, where) {
+  checkPreconditions(iter);
+  if (isNumber(where)) {
+    return doSeek(iter, {
+      forward: (_, count) => count > where,
+      backward: (_, count) => count <= where
+    });
+  } else if (isText(where)) {
+    return doSeek(iter, {
+      forward: (node, _) => after(node, where),
+      backward: (node, _) => node === where || before(node, where)
+    });
+  } else {
+    return Promise.reject(new Error(E_SEEK));
+  }
 }
 
 
@@ -29,7 +35,33 @@ function checkPreconditions(iter) {
 }
 
 
-function seek(iter, predicates) {
+function isNumber(n) {
+  return !isNaN(parseInt(n)) && isFinite(n);
+}
+
+
+function isText(node) {
+  if (typeof(node.nodeType) === 'number') {
+    return node.nodeType === Node.TEXT_NODE;
+  } else {
+    return false;
+  }
+}
+
+
+function before(referenceNode, node) {
+  return referenceNode.compareDocumentPosition(node) &
+    (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_CONTAINED_BY);
+}
+
+
+function after(referenceNode, node) {
+  return referenceNode.compareDocumentPosition(node) &
+    (Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_CONTAINS);
+}
+
+
+function doSeek(iter, predicates) {
   var yieldAt = Date.now() + TICK_LENGTH;
 
   function forward(count) {
@@ -83,22 +115,4 @@ function seek(iter, predicates) {
   }
 
   return forward(0).then(backward);
-}
-
-
-export function to(iter, node) {
-  checkPreconditions(iter);
-  return seek(iter, {
-    forward: (curNode, _) => after(curNode, node),
-    backward: (curNode, _) => curNode === node || before(curNode, node)
-  });
-}
-
-
-export function by(iter, offset) {
-  checkPreconditions(iter);
-  return seek(iter, {
-    forward: (_, count) => count > offset,
-    backward: (_, count) => count <= offset
-  });
 }

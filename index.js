@@ -3,20 +3,36 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports.to = to;
-exports.by = by;
+exports['default'] = seek;
 var E_SEEK = 'Argument 1 of seek is neither a number nor Text Node.';
 var E_SHOW = 'NodeIterator.whatToShow is not NodeFilter.SHOW_TEXT.';
 
 var FRAME_RATE = 60;
 var TICK_LENGTH = 1000 / FRAME_RATE;
 
-function before(referenceNode, node) {
-  return referenceNode.compareDocumentPosition(node) & (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_CONTAINED_BY);
-}
-
-function after(referenceNode, node) {
-  return referenceNode.compareDocumentPosition(node) & (Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_CONTAINS);
+function seek(iter, where) {
+  checkPreconditions(iter);
+  if (isNumber(where)) {
+    return doSeek(iter, {
+      forward: function forward(_, count) {
+        return count > where;
+      },
+      backward: function backward(_, count) {
+        return count <= where;
+      }
+    });
+  } else if (isText(where)) {
+    return doSeek(iter, {
+      forward: function forward(node, _) {
+        return after(node, where);
+      },
+      backward: function backward(node, _) {
+        return node === where || before(node, where);
+      }
+    });
+  } else {
+    return Promise.reject(new Error(E_SEEK));
+  }
 }
 
 function checkPreconditions(iter) {
@@ -30,7 +46,27 @@ function checkPreconditions(iter) {
   }
 }
 
-function seek(iter, predicates) {
+function isNumber(n) {
+  return !isNaN(parseInt(n)) && isFinite(n);
+}
+
+function isText(node) {
+  if (typeof node.nodeType === 'number') {
+    return node.nodeType === Node.TEXT_NODE;
+  } else {
+    return false;
+  }
+}
+
+function before(referenceNode, node) {
+  return referenceNode.compareDocumentPosition(node) & (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_CONTAINED_BY);
+}
+
+function after(referenceNode, node) {
+  return referenceNode.compareDocumentPosition(node) & (Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_CONTAINS);
+}
+
+function doSeek(iter, predicates) {
   var yieldAt = Date.now() + TICK_LENGTH;
 
   function forward(_x) {
@@ -105,28 +141,5 @@ function seek(iter, predicates) {
 
   return forward(0).then(backward);
 }
-
-function to(iter, node) {
-  checkPreconditions(iter);
-  return seek(iter, {
-    forward: function forward(curNode, _) {
-      return after(curNode, node);
-    },
-    backward: function backward(curNode, _) {
-      return curNode === node || before(curNode, node);
-    }
-  });
-}
-
-function by(iter, offset) {
-  checkPreconditions(iter);
-  return seek(iter, {
-    forward: function forward(_, count) {
-      return count > offset;
-    },
-    backward: function backward(_, count) {
-      return count <= offset;
-    }
-  });
-}
+module.exports = exports['default'];
 

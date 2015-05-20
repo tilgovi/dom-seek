@@ -32,19 +32,21 @@ in index.js
 Usage
 =====
 
-## `seek.to(iter, node)`
+## `seek(iter, where)`
 
-Seeks the iterator forward or backward until its reference node is either equal
-to the argument, when it is a `Text` node, or the `Text` node that immediately
-precedes the first `Text` node in `Element` in the iteration sequence.
+The `iter` argument must be a `NodeIterator` instance with a `whatToShow`
+property equal to `NodeFilter.SHOW_TEXT`.
 
-Returns a `Promise` that will be fulfilled with the number of characters
-traversed.
+The `where` argument is an integer, else an `Element` or `Text` node.
 
-## `seek.by(iter, offset)`
+If the argument is an integer, seeks the iterator forward (if where is positive)
+or backward (if where is negative) until `where` characters have been traversed
+orthe traversal ends.
 
-Seeks the iterator forward (if offset is positive) or backward (if offset is
-negative) until `offset` characters have been traversed or the traversal ends.
+If the argument is a node, seeks the iterator forward or backward until its
+reference node is either equal to the argument, when the argument is a `Text`
+node, or the `Text` node that immediately precedes the first `Text` node
+contained by the argument, when the argument is an `Element`.
 
 Returns a `Promise` that will be fulfilled with the number of characters
 traversed.
