@@ -43,7 +43,10 @@ reference node is either equal to the argument, when the argument is a `Text`
 node, or the `Text` node that immediately precedes the first `Text` node
 contained by the argument, when the argument is an `Element`.
 
-Returns the number of characters traversed.
+Returns the number of characters traversed (negative if traversing backwards).
+Iteration always finishes with the pointer before the node containing the
+destination offset, meaning that the return value may be less than the requested
+value (a greater negative value than requested, if negative).
 
 Example
 =======
@@ -85,7 +88,7 @@ var end = split(length);
 
 // Walk backwards, collecting all the nodes
 var nodes = [];
-while (iter.referenceNode !== start) {
+while (iter.referenceNode !== start && !iter.pointerBeforeReferenceNode) {
   nodes.push(iter.previousNode());
 }
 

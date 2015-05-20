@@ -66,34 +66,23 @@ describe('seek', function () {
       iter = createIter();
     });
 
-    afterEach(function () {
-      assert.isTrue(iter.pointerBeforeReferenceNode);
-    });
-
     it('accepts zero as an argument', function () {
       assert.doesNotThrow(() => seek(iter, 0));
     });
 
-    describe('when traversing past the beginning', function () {
-      it('stops', function () {
-        let count = seek(iter, -100);
-        assert.equal(count, 0);
-      });
-
-      it('ends on a text node', function () {
-        let text = fixture.el.childNodes[0].childNodes[0].childNodes[0];
-        let count = seek(iter, -100);
-        assert.strictEqual(iter.referenceNode, text);
-      });
+    it('stops when traversing past the beginning', function () {
+      let count = seek(iter, -100);
+      assert.equal(count, 0);
+      assert.strictEqual(iter.referenceNode, iter.root);
+      assert.isTrue(iter.pointerBeforeReferenceNode);
     });
 
-    describe('when traversing past the end', function () {
-      it('stops', function () {
-        let p = fixture.el.childNodes[0];
-        let text = p.childNodes[p.childNodes.length-1];
-        let count = seek(iter, fixture.el.textContent.length + 100);
-        assert.strictEqual(iter.referenceNode, text);
-      });
+    it('stops when traversing past the end', function () {
+      let p = fixture.el.childNodes[0];
+      let text = p.childNodes[p.childNodes.length-1];
+      let count = seek(iter, fixture.el.textContent.length + 100);
+      assert.strictEqual(iter.referenceNode, text);
+      assert.isFalse(iter.pointerBeforeReferenceNode);
     });
 
     it('seeks to that offset if it marks the start of a node', function () {
@@ -101,7 +90,7 @@ describe('seek', function () {
       let offset = fixture.el.textContent.indexOf(text);
       let count = seek(iter, offset);
       assert.equal(count, offset);
-      assert.equal(iter.referenceNode.textContent, text);
+      assert.equal(iter.nextNode().textContent, text);
     });
 
     it('seeks to the nearest node', function () {
@@ -110,15 +99,22 @@ describe('seek', function () {
       let count = seek(iter, offset + 5);
       assert.equal(count, offset);
       assert.equal(iter.referenceNode.textContent, text);
+      assert.isTrue(iter.pointerBeforeReferenceNode);
     });
 
     it('seeks forwards and backwards', function () {
       let text = 'commodo vitae'
       let offset = fixture.el.textContent.indexOf(text);
+
       let end = seek(iter, offset + text.length);
-      let count = seek(iter, -text.length);
+      assert.equal(end, offset + text.length);
+      assert.equal(iter.referenceNode.textContent, text);
+      assert.isFalse(iter.pointerBeforeReferenceNode);
+
+      let count = seek(iter, -(text.length - 3));
       assert.equal(count, -text.length);
       assert.equal(iter.referenceNode.textContent, text);
+      assert.isTrue(iter.pointerBeforeReferenceNode);
     });
   });
 });

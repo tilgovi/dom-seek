@@ -13,40 +13,30 @@ export default function seek(iter, where) {
   }
 
   let count = 0;
-  let node = null;
+  let node = iter.referenceNode;
   let predicates = null;
 
   if (isNumber(where)) {
     predicates = {
-      forward: () => count <= where,
+      forward: () => count < where,
       backward: () => count > where
     };
   } else if (isText(where)) {
     predicates = {
-      forward: () => node === where || before(node, where),
+      forward: () => before(node, where),
       backward: () => after(node, where)
     };
   } else {
     throw new Error(E_WHERE);
   }
 
-  if (iter.pointerBeforeReferenceNode) {
-    node = iter.referenceNode;
-  } else {
-    node = iter.previousNode();
+  while (predicates.forward() && (node = iter.nextNode()) !== null) {
+    count += node.textContent.length;
   }
 
-  do {
-    node = iter.nextNode();
-    if (node === null) break;
-    count += node.textContent.length;
-  } while(predicates.forward());
-
-  do {
-    node = iter.previousNode();
-    if (node === null) break;
+  while (predicates.backward() && (node = iter.previousNode()) !== null) {
     count -= node.textContent.length;
-  } while(predicates.backward());
+  }
 
   return count;
 }
