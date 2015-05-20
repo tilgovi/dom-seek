@@ -20,12 +20,10 @@
     "url": "https://github.com/tilgovi/dom-seek/issues"
   },
   "homepage": "https://github.com/tilgovi/dom-seek",
-  "dependencies": {
-    "babelify": "^6.0.2"
-  },
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "babel": "^5.4.3",
+    "babelify": "^6.1.1"
   }
 }
