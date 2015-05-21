@@ -39,9 +39,8 @@ or backward (if where is negative) until `where` characters have been traversed
 orthe traversal ends.
 
 If the argument is a node, seeks the iterator forward or backward until its
-reference node is either equal to the argument, when the argument is a `Text`
-node, or the `Text` node that immediately precedes the first `Text` node
-contained by the argument, when the argument is an `Element`.
+reference node is equal to the argument and the iterator pointer is before the
+reference node.
 
 Returns the number of characters traversed (negative if traversing backwards).
 Iteration always finishes with the pointer before the node containing the
