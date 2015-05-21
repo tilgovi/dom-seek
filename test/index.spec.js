@@ -2,7 +2,7 @@ import {default as seek} from '../index'
 
 
 function createIter(whatToShow = NodeFilter.SHOW_TEXT) {
-  return document.createNodeIterator(fixture.el, whatToShow);
+  return document.createNodeIterator(fixture.el, whatToShow, null, false);
 }
 
 
