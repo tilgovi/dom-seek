@@ -24,7 +24,7 @@ export default function seek(iter, where) {
   } else if (isText(where)) {
     predicates = {
       forward: () => before(node, where),
-      backward: () => after(node, where)
+      backward: () => !iter.pointerBeforeReferenceNode || after(node, where)
     };
   } else {
     throw new Error(E_WHERE);
