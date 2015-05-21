@@ -1,4 +1,4 @@
-import {default as seek} from '../index.es6'
+import {default as seek} from '../index'
 
 
 function createIter(whatToShow = NodeFilter.SHOW_TEXT) {
