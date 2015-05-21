@@ -9,7 +9,9 @@ env:
   - BROWSER=PhantomJS
   - BROWSER=SL_Chrome
   - BROWSER=SL_Firefox
-  - BROWSER=SL_Safari
+  - BROWSER=SL_Safari_6
+  - BROWSER=SL_Safari_7
+  - BROWSER=SL_Safari_8
   - BROWSER=SL_IE_9
   - BROWSER=SL_IE_10
   - BROWSER=SL_IE_11
