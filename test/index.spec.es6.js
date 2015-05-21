@@ -117,4 +117,30 @@ describe('seek', function () {
       assert.isTrue(iter.pointerBeforeReferenceNode);
     });
   });
+
+  describe('to a node', function () {
+    it('seeks to the given node', function () {
+      let iter = createIter();
+      let node = fixture.el.getElementsByTagName('code')[0].childNodes[0]
+      let offset = fixture.el.textContent.indexOf(node.textContent);
+      let count = seek(iter, node);
+      assert.equal(count, offset);
+      assert.strictEqual(iter.referenceNode, node);
+      assert.isTrue(iter.pointerBeforeReferenceNode);
+    });
+
+    it('seeks forwards and backwards', function () {
+      let iter = createIter();
+      let text = fixture.el.textContent;
+      let code = fixture.el.getElementsByTagName('code')[0].childNodes[0]
+      let strong = fixture.el.getElementsByTagName('strong')[0].childNodes[0]
+      seek(iter, code);
+
+      let from = text.indexOf(code.textContent);
+      let to =  text.indexOf(strong.textContent);
+      let count = seek(iter, strong);
+      let expected = to - from;
+      assert.equal(count, expected);
+    });
+  });
 });
