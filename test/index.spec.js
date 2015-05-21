@@ -1,4 +1,7 @@
-import {default as seek} from '../index'
+import * as shim from 'node-iterator-shim'
+import seek from '../index'
+
+shim.install();
 
 
 function createIter(whatToShow = NodeFilter.SHOW_TEXT) {
