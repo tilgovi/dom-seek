@@ -4,23 +4,27 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = seek;
+var E_ITER = 'Argument 1 of seek must be a NodeIterator.';
 var E_SHOW = 'Argument 1 of seek must use filter NodeFilter.SHOW_TEXT.';
-var E_SEEK = 'Argument 2 of seek is neither a number nor Text Node.';
+var E_WHERE = 'Argument 2 of seek must be a number or a Text Node.';
 
 function seek(iter, where) {
+  if (!(iter instanceof NodeIterator)) {
+    throw new Error(E_ITER);
+  }
 
   if (iter.whatToShow !== NodeFilter.SHOW_TEXT) {
     throw new Error(E_SHOW);
   }
 
   var count = 0;
-  var node = null;
+  var node = iter.referenceNode;
   var predicates = null;
 
   if (isNumber(where)) {
     predicates = {
       forward: function forward() {
-        return count <= where;
+        return count < where;
       },
       backward: function backward() {
         return count > where;
@@ -29,33 +33,23 @@ function seek(iter, where) {
   } else if (isText(where)) {
     predicates = {
       forward: function forward() {
-        return node === where || before(node, where);
+        return before(node, where);
       },
       backward: function backward() {
-        return after(node, where);
+        return !iter.pointerBeforeReferenceNode || after(node, where);
       }
     };
   } else {
-    throw new Error(E_SEEK);
+    throw new Error(E_WHERE);
   }
 
-  if (iter.pointerBeforeReferenceNode) {
-    node = iter.referenceNode;
-  } else {
-    node = iter.previousNode();
-  }
-
-  do {
-    node = iter.nextNode();
-    if (node === null) break;
+  while (predicates.forward() && (node = iter.nextNode()) !== null) {
     count += node.textContent.length;
-  } while (predicates.forward());
+  }
 
-  do {
-    node = iter.previousNode();
-    if (node === null) break;
+  while (predicates.backward() && (node = iter.previousNode()) !== null) {
     count -= node.textContent.length;
-  } while (predicates.backward());
+  }
 
   return count;
 }
@@ -68,12 +62,12 @@ function isText(node) {
   return node.nodeType === Node.TEXT_NODE;
 }
 
-function before(referenceNode, node) {
-  return referenceNode.compareDocumentPosition(node) & (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_CONTAINED_BY);
+function before(ref, node) {
+  return ref.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING;
 }
 
-function after(referenceNode, node) {
-  return referenceNode.compareDocumentPosition(node) & (Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_CONTAINS);
+function after(ref, node) {
+  return ref.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_PRECEDING;
 }
 module.exports = exports['default'];
 
