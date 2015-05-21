@@ -5,4 +5,11 @@ env:
   global:
   - secure: WpONrYFk2EARWh2pYRvbQzdY+0klUB24MmTKYKPs2eCmtgE2BYiz6MbgXrUGpUcIK1ejV4Bsa2eKE0BU68BxdWOInJ+R4Sb9lTtHyjeRvqkjn8LrBBZn5sm0vN/xPOLxa/C5opQO2y4SyagDAH4qj9dMe+Af7XFdY9ZRFqYO1y0=
   - secure: IOJ2av5z26juZkT+1gdSunVAcGViYz7Tg7wuBw8vDMkhC+6uTdrfdZjQ4cbxSpITxYrxWb14VZhlKV5G2OnYJIU9iC4EEFhqOOTgIiQues1eeV11vaP4IrE6vncZTgZ7iuMeiwzhVzrb2/xWEAyG/7BhHDf4aQGDRqRxWgi2qZk=
+  matrix:
+  - BROWSER=SL_Chrome
+  - BROWSER=SL_Firefox
+  - BROWSER=SL_Safari
+  - BROWSER=SL_IE_9
+  - BROWSER=SL_IE_10
+  - BROWSER=SL_IE_11
 before_script: npm install -g karma-cli
