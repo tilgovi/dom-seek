@@ -52,13 +52,11 @@ function isText(node) {
 }
 
 
-function before(referenceNode, node) {
-  return referenceNode.compareDocumentPosition(node) &
-    (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_CONTAINED_BY);
+function before(ref, node) {
+  return ref.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING;
 }
 
 
-function after(referenceNode, node) {
-  return referenceNode.compareDocumentPosition(node) &
-    (Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_CONTAINS);
+function after(ref, node) {
+  return ref.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_PRECEDING;
 }
