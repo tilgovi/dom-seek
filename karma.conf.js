@@ -13,7 +13,7 @@ if (!process.env.SAUCE_USERNAME) {
 
 module.exports = function(config) {
   config.set({
-    browsers: ['Firefox'],
+    browsers: [process.env.BROWSER] || [],
     frameworks: [
       'fixture',
       'browserify',
@@ -45,7 +45,21 @@ module.exports = function(config) {
         base: 'SauceLabs',
         browserName: 'chrome'
       },
-      'SL_IE': {
+      'SL_Firefox': {
+        base: 'SauceLabs',
+        browserName: 'firefox'
+      },
+      'SL_IE_9': {
+        base: 'SauceLabs',
+        browserName: 'internet explorer',
+        version: '9'
+      },
+      'SL_IE_10': {
+        base: 'SauceLabs',
+        browserName: 'internet explorer',
+        version: '10'
+      },
+      'SL_IE_11': {
         base: 'SauceLabs',
         browserName: 'internet explorer',
         version: '11'
