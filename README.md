@@ -1,6 +1,8 @@
 DOM Seek
 ========
 
+[![Build Status](https://travis-ci.org/tilgovi/dom-seek.svg?branch=master)](https://travis-ci.org/tilgovi/dom-seek)
+
 POSIX has `lseek(2)`. Now the browser has `dom-seek`.
 
 This library can answer two kinds of questions about character offsets in a
