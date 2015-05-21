@@ -4,15 +4,10 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = seek;
-var E_ITER = 'Argument 1 of seek must be a NodeIterator.';
 var E_SHOW = 'Argument 1 of seek must use filter NodeFilter.SHOW_TEXT.';
 var E_WHERE = 'Argument 2 of seek must be a number or a Text Node.';
 
 function seek(iter, where) {
-  if (!(iter instanceof NodeIterator)) {
-    throw new Error(E_ITER);
-  }
-
   if (iter.whatToShow !== NodeFilter.SHOW_TEXT) {
     throw new Error(E_SHOW);
   }
