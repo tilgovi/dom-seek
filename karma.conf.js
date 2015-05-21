@@ -13,7 +13,7 @@ if (!process.env.SAUCE_USERNAME) {
 
 module.exports = function(config) {
   config.set({
-    browsers: [process.env.BROWSER] || [],
+    browsers: process.env.BROWSER ? [process.env.BROWSER] : ['PhantomJS'],
     frameworks: [
       'fixture',
       'browserify',
@@ -49,9 +49,29 @@ module.exports = function(config) {
         base: 'SauceLabs',
         browserName: 'firefox'
       },
-      'SL_Safari': {
-        base: 'SauceLabs',
-        browserName: 'safari'
+      "SL_Safari_5": {
+        base: "SauceLabs",
+        browserName: "Safari",
+        platform: "OS X 10.6",
+        version: "5"
+      },
+      "SL_Safari_6": {
+        base: "SauceLabs",
+        browserName: "Safari",
+        platform: "OS X 10.8",
+        version: "6"
+      },
+      "SL_Safari_7": {
+        base: "SauceLabs",
+        browserName: "Safari",
+        platform: "OS X 10.9",
+        version: "7"
+      },
+      "SL_Safari_8": {
+        base: "SauceLabs",
+        browserName: "Safari",
+        platform: "OS X 10.10",
+        version: "8"
       },
       'SL_IE_9': {
         base: 'SauceLabs',

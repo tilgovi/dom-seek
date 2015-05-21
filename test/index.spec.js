@@ -27,10 +27,6 @@ describe('seek', function () {
   });
 
   describe('argument 1', function () {
-    it('must be a NodeIterator', function () {
-      assert.throws(() => seek('thing', 10), /must be a NodeIterator/);
-    });
-
     it('must use `NodeFilter.SHOW_TEXT`', function () {
       let iter = createIter(NodeFilter.SHOW_ELEMENT);
       assert.throws(() => seek(iter, 0), /NodeFilter.SHOW_TEXT/);
