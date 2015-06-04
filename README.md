@@ -2,6 +2,7 @@ DOM Seek
 ========
 
 [![Build Status](https://travis-ci.org/tilgovi/dom-seek.svg?branch=master)](https://travis-ci.org/tilgovi/dom-seek)
+[![Coverage Status](https://coveralls.io/repos/tilgovi/dom-seek/badge.svg?branch=master)](https://coveralls.io/r/tilgovi/dom-seek?branch=master)
 
 POSIX has `lseek(2)`. Now the browser has `dom-seek`.
 
