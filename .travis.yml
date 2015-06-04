@@ -19,6 +19,8 @@ env:
 before_script:
 - npm install -g karma-cli
 - npm install karma-coveralls
+script:
+- '[ "${TRAVIS_PULL_REQUEST}" = "false" -o "${BROWSER}" = "PhantomJS" ] && npm test || true'
 notifications:
   email: false
   irc:
