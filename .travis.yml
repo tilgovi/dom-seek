@@ -17,11 +17,14 @@ env:
   - BROWSER=SL_IE_9
   - BROWSER=SL_IE_10
   - BROWSER=SL_IE_11
+matrix:
+  exclude:
+  - env: TRAVIS_PULL_REQUEST=false
+  include:
+  - env: BROWSER=PhantomJS
 before_script:
 - npm install -g karma-cli
 - npm install karma-coveralls
-script:
-- '[ "${TRAVIS_PULL_REQUEST}" = "false" -o "${BROWSER}" = "PhantomJS" ] && npm test || true'
 notifications:
   email: false
   irc:
