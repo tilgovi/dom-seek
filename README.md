@@ -34,14 +34,15 @@ Usage
 
 ## `seek(iter, where)`
 
-The `iter` argument must be a `NodeIterator` instance with a `whatToShow`
-property equal to `NodeFilter.SHOW_TEXT`.
+The `iter` argument must be a `NodeIterator`
+([docs](https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator))
+instance with a `whatToShow` property equal to `NodeFilter.SHOW_TEXT`.
 
 The `where` argument is an integer, else an `Element` or `Text` node.
 
-If the argument is an integer, seeks the iterator forward (if where is positive)
-or backward (if where is negative) until `where` characters have been traversed
-orthe traversal ends.
+If the argument is an integer, seeks the iterator forward (if `where` is
+positive) or backward (if `where` is negative) until `where` characters have
+been traversed orthe traversal ends.
 
 If the argument is a node, seeks the iterator forward or backward until its
 reference node is equal to the argument and the iterator pointer is before the
