@@ -2,6 +2,7 @@ DOM Seek
 ========
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![NPM Package](https://img.shields.io/npm/v/dom-seek.svg)](https://www.npmjs.com/package/dom-seek)
 [![Build Status](https://travis-ci.org/tilgovi/dom-seek.svg?branch=master)](https://travis-ci.org/tilgovi/dom-seek)
 [![Coverage Status](https://coveralls.io/repos/tilgovi/dom-seek/badge.svg?branch=master)](https://coveralls.io/r/tilgovi/dom-seek?branch=master)
 
