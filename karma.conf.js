@@ -1,8 +1,25 @@
 var fs = require('fs');
 
+
+var browsers = ['PhantomJS'];
+
+if (process.env.SAUCE_USERNAME && process.env.SAUCE_ACCESS_KEY) {
+  browsers = browsers.concat([
+      'SL_Chrome',
+      'SL_Firefox',
+      "SL_Safari_5",
+      "SL_Safari_6",
+      "SL_Safari_7",
+      "SL_Safari_8",
+      'SL_IE_9',
+      'SL_IE_10',
+      'SL_IE_11'
+  ]);
+}
+
 module.exports = function(config) {
   config.set({
-    browsers: process.env.BROWSER ? [process.env.BROWSER] : ['PhantomJS'],
+    browsers: browsers,
     frameworks: [
       'fixture',
       'browserify',
