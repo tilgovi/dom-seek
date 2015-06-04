@@ -14,7 +14,8 @@ module.exports = function(config) {
       'test/*.spec.js',
       'test/fixtures/*.html'
     ],
-    reporters: ['progress', 'coverage'],
+    reporters: ['progress', 'coverage'].concat(
+      (process.env.COVERALLS_REPO_TOKEN ? ['coveralls'] : [])),
     preprocessors: {
       'test/*.spec.js': ['browserify'],
       'test/fixtures/*.html': ['html2js']
