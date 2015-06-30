@@ -1,5 +1,5 @@
 import shim from 'node-iterator-shim'
-import seek from '../index'
+import seek from '../seek'
 
 shim();
 
