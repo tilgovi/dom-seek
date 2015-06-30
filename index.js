@@ -48,10 +48,10 @@ function isText(node) {
 
 
 function before(ref, node) {
-  return ref.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING;
+  return node.compareDocumentPosition(ref) & Node.DOCUMENT_POSITION_PRECEDING;
 }
 
 
 function after(ref, node) {
-  return ref.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_PRECEDING;
+  return node.compareDocumentPosition(ref) & Node.DOCUMENT_POSITION_FOLLOWING;
 }
