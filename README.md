@@ -26,8 +26,7 @@ With a CommonJS bundler to `require('dom-seek')`:
 
 With a script tag, include one of the scripts from the `dist` directory.
 
-RequireJS or other AMD loaders should be able to wrap the CommonJS module
-in index.js
+With AMD loaders, these scripts should also work.
 
 Usage
 =====
