@@ -44,6 +44,6 @@
     "karma-sauce-launcher": "^0.2.11",
     "karma-source-map-support": "^1.0.0",
     "mocha": "^2.2.5",
-    "node-iterator-shim": "^1.0.0-beta.3"
+    "node-iterator-shim": "^1.0.0"
   }
 }
