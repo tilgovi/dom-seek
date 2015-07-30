@@ -1,6 +1,6 @@
 {
   "name": "dom-seek",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Text traversal for HTML documents.",
   "scripts": {
     "test": "karma start"
