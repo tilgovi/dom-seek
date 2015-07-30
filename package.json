@@ -21,6 +21,12 @@
   },
   "homepage": "https://github.com/tilgovi/dom-seek",
   "main": "dist/seek.js",
+  "browser": "seek.js",
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
   "dependencies": {},
   "devDependencies": {
     "babel": "^5.4.3",
