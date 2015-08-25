@@ -1,11 +1,9 @@
-import shim from 'node-iterator-shim'
-import seek from '../seek'
-
-shim();
+import createNodeIterator from 'node-iterator-shim';
+import seek from '../seek';
 
 
 function createIter(whatToShow = NodeFilter.SHOW_TEXT) {
-  return document.createNodeIterator(fixture.el, whatToShow, null, false);
+  return createNodeIterator(fixture.el, whatToShow);
 }
 
 
