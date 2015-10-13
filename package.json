@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "Text traversal for HTML documents.",
   "scripts": {
-    "test": "karma start"
+    "test": "karma start --single-run"
   },
   "repository": {
     "type": "git",

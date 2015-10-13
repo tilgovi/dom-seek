@@ -81,7 +81,6 @@ module.exports = function(config) {
     },
     sauceLabs: {
       testName: 'DOM Seek'
-    },
-    singleRun: true
+    }
   });
 };
