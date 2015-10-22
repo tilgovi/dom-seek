@@ -70,9 +70,6 @@ function before(ref, node) {
   left = left[0]
   right = right[0]
 
-  if (left == null) return false
-  if (right == null) return true
-
   let l = indexOf(common.childNodes, left)
   let r = indexOf(common.childNodes, right)
 
