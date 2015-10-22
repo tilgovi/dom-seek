@@ -13,8 +13,7 @@ env:
   - BROWSER=PhantomJS npm_config_coverage=true
   - BROWSER=SL_Chrome
   - BROWSER=SL_Firefox
-  - BROWSER=SL_Safari_7
-  - BROWSER=SL_Safari_8
+  - BROWSER=SL_Safari
   - BROWSER=SL_IE_8
   - BROWSER=SL_IE_9
   - BROWSER=SL_IE_10
