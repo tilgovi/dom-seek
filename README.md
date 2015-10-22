@@ -47,10 +47,11 @@ If the argument is a node, seeks the iterator forward or backward until its
 reference node is equal to the argument and the iterator pointer is before the
 reference node.
 
-Returns the number of characters traversed (negative if traversing backwards).
-Iteration always finishes with the pointer before the node containing the
-destination offset, meaning that the return value may be less than the requested
-value (a greater negative value than requested, if negative).
+Iteration always terminates with the iterator pointer before its reference node,
+the node that contains the destination offset.
+
+Returns the change in the offset. Note that this will be negative when the
+traversal causes the iterator to move backward.
 
 Example
 =======
