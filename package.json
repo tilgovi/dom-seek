@@ -22,7 +22,11 @@
   },
   "homepage": "https://github.com/tilgovi/dom-seek",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "ancestors": "0.0.3",
+    "dom-contains": "^0.2.0",
+    "indexof": "0.0.1"
+  },
   "devDependencies": {
     "assertive-chai": "^2.0.2",
     "babel": "^5.8.23",

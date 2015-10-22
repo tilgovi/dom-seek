@@ -1,9 +1,19 @@
-const E_SHOW = 'Argument 1 of seek must use filter NodeFilter.SHOW_TEXT.';
-const E_WHERE = 'Argument 2 of seek must be a number or a Text Node.';
+import ancestors from 'ancestors'
+import contains from 'dom-contains'
+import indexof from 'indexof'
+
+const E_SHOW = 'Argument 1 of seek must use filter NodeFilter.SHOW_TEXT.'
+const E_WHERE = 'Argument 2 of seek must be a number or a Text Node.'
+
+const SHOW_TEXT = 4
+const TEXT_NODE = 3
+
+const DOCUMENT_POSITION_PRECEDING = 2
+const DOCUMENT_POSITION_FOLLOWING = 4
 
 
 export default function seek(iter, where) {
-  if (iter.whatToShow !== NodeFilter.SHOW_TEXT) {
+  if (iter.whatToShow !== SHOW_TEXT) {
     throw new Error(E_SHOW);
   }
 
@@ -17,20 +27,20 @@ export default function seek(iter, where) {
       backward: () => count > where
     };
   } else if (isText(where)) {
-    predicates = {
-      forward: () => before(node, where),
-      backward: () => !iter.pointerBeforeReferenceNode || after(node, where)
-    };
+    debugger
+    let forward = before(node, where) ? () => false : () => node !== where
+    let backward = () => node != where || !iter.pointerBeforeReferenceNode
+    predicates = {forward, backward}
   } else {
     throw new Error(E_WHERE);
   }
 
   while (predicates.forward() && (node = iter.nextNode()) !== null) {
-    count += node.textContent.length;
+    count += node.nodeValue.length;
   }
 
   while (predicates.backward() && (node = iter.previousNode()) !== null) {
-    count -= node.textContent.length;
+    count -= node.nodeValue.length;
   }
 
   return count;
@@ -43,15 +53,29 @@ function isNumber(n) {
 
 
 function isText(node) {
-  return node.nodeType === Node.TEXT_NODE;
+  return node.nodeType === TEXT_NODE;
 }
 
 
 function before(ref, node) {
-  return node.compareDocumentPosition(ref) & Node.DOCUMENT_POSITION_PRECEDING;
-}
+  if (ref === node) return false
 
+  let common = null
+  let left = [ref].concat(ancestors(ref)).reverse()
+  let right = [node].concat(ancestors(node)).reverse()
 
-function after(ref, node) {
-  return node.compareDocumentPosition(ref) & Node.DOCUMENT_POSITION_FOLLOWING;
+  while (left[0] === right[0]) {
+    common = left.shift()
+    right.shift()
+  }
+
+  left = left[0]
+  right = right[0]
+
+  if (left == null) return false
+  if (right == null) return true
+
+  let l = indexof(common.childNodes, left)
+  let r = indexof(common.childNodes, right)
+  return l > r
 }
