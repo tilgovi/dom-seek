@@ -11,9 +11,9 @@ POSIX has `lseek(2)`. Now the browser has `dom-seek`.
 This library can answer two kinds of questions about character offsets in a
 document:
 
-- Given a `Node`, at what offset does its text content start?
+- What is the offset of the given `TextNode` within a text?
 
-- Given an offset, in which `Node` can I find that text?
+- Which `TextNode` within a text contains the given offset?
 
 Installation
 ============
@@ -22,12 +22,12 @@ Using npm:
 
     npm install dom-seek
 
-Compatibility Notes
-===================
+Compatibility Note
+==================
 
-- Use the `dom-node-iterator` for a portable `NodeIterator` polyfill.
-
-- Use `es5-shim`, `core-js` or similar for IE8 compatibility.
+Use the `dom-node-iterator` for a portable `NodeIterator` polyfill if targeting
+browsers that lack a full implementation that includes the `referenceNode` and
+`pointerBeforeReferenceNode` properties.
 
 Usage
 =====
@@ -42,14 +42,11 @@ The `where` argument is an integer, else an `Element` or `Text` node.
 
 If the argument is an integer, seeks the iterator forward (if `where` is
 positive) or backward (if `where` is negative) until `where` characters have
-been traversed or the traversal ends.
+been traversed or the traversal ends. The iterator may be left with its pointer
+either before or after the reference node.
 
 If the argument is a node, seeks the iterator forward or backward until its
-reference node is equal to the argument and the iterator pointer is before the
-reference node.
-
-Iteration always terminates with the iterator pointer before its reference node,
-the node that contains the destination offset.
+pointer is positioned immediately before the given node.
 
 Returns the change in the offset. Note that this will be negative when the
 traversal causes the iterator to move backward.
