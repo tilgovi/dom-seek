@@ -42,7 +42,7 @@ The `where` argument is an integer, else an `Element` or `Text` node.
 
 If the argument is an integer, seeks the iterator forward (if `where` is
 positive) or backward (if `where` is negative) until `where` characters have
-been traversed orthe traversal ends.
+been traversed or the traversal ends.
 
 If the argument is a node, seeks the iterator forward or backward until its
 reference node is equal to the argument and the iterator pointer is before the
