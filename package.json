@@ -24,8 +24,7 @@
   "main": "index.js",
   "dependencies": {
     "ancestors": "0.0.3",
-    "dom-contains": "^0.2.0",
-    "indexof": "0.0.1"
+    "dom-contains": "^0.2.0"
   },
   "devDependencies": {
     "assertive-chai": "^2.0.2",
@@ -33,6 +32,8 @@
     "babelify": "*",
     "browserify": "^11.2.0",
     "browserify-istanbul": "*",
+    "core-js": "^1.2.3",
+    "dom-node-iterator": "^3.1.2",
     "isparta": "^3.1.0",
     "karma": "^0.12.37",
     "karma-browserify": "^4.4.0",
@@ -44,7 +45,6 @@
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-sauce-launcher": "^0.3.0",
     "mocha": "^2.3.3",
-    "dom-node-iterator": "^3.1.2",
     "phantomjs": "^1.9.18"
   }
 }
