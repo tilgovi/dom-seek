@@ -1,4 +1,4 @@
-import seek from '../../src';
+import seek from '../../src'
 
 const SHOW_TEXT = 4
 
