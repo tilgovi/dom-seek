@@ -1,5 +1,5 @@
 import createNodeIterator from 'node-iterator-shim';
-import seek from '../seek';
+import seek from '../../src';
 
 
 function createIter(whatToShow = NodeFilter.SHOW_TEXT) {
@@ -8,17 +8,9 @@ function createIter(whatToShow = NodeFilter.SHOW_TEXT) {
 
 
 describe('seek', function () {
-  before(function(){
-    fixture.setBase('test/fixtures')
-  });
 
-  beforeEach(function () {
-    fixture.load('test.html');
-  });
-
-  afterEach(function () {
-    fixture.cleanup();
-  });
+  before(() => fixture.load('test.html'))
+  after(() => fixture.cleanup())
 
   it('is a function', function () {
     assert.isFunction(seek)

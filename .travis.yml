@@ -16,9 +16,6 @@ env:
   - BROWSER=SL_IE_9
   - BROWSER=SL_IE_10
   - BROWSER=SL_IE_11
-before_script:
-- npm install -g karma-cli
-- npm install karma-coveralls
 notifications:
   email: false
   irc:

@@ -1,35 +1,28 @@
-var fs = require('fs');
+var babelify = require('babelify').configure({loose: 'all'})
+var isparta = require('isparta')
+var istanbul = require('browserify-istanbul')({
+  instrumenter: isparta,
+  instrumenterConfig: {babel: {loose: 'all'}}
+})
 
 module.exports = function(config) {
   config.set({
-    browsers: process.env.BROWSER ? [process.env.BROWSER] : ['PhantomJS'],
-    frameworks: [
-      'fixture',
-      'browserify',
-      'chai',
-      'mocha',
-      'source-map-support'
-    ],
+    basePath: 'test',
+    browsers: ['PhantomJS'],
+    browserify: {debug: true, transform: [babelify]},
+    frameworks: ['browserify', 'fixture', 'mocha'],
     files: [
-      'test/*.spec.js',
-      'test/fixtures/*.html'
+      'adapter.js',
+      'spec/fixtures/*.html',
+      'spec/*.js',
     ],
-    reporters: ['progress', 'coverage'].concat(
-      (process.env.COVERALLS_REPO_TOKEN ? ['coveralls'] : [])),
     preprocessors: {
-      'test/*.spec.js': ['browserify'],
-      'test/fixtures/*.html': ['html2js']
+      '**/*.js': ['browserify'],
+      '**/*.html': ['html2js']
     },
-    browserify: {
-      debug: true,
-      transform: ['babelify', 'browserify-istanbul']
-    },
-    coverageReporter: {
-      reporters: [
-        {type: 'lcovonly'},
-        {type: 'text'}
-      ]
-    },
+    reporters: ['progress', 'saucelabs'],
+    sauceLabs: {testName: 'DOM Seek test'},
+
     customLaunchers: {
       'SL_Chrome': {
         base: 'SauceLabs',
@@ -39,29 +32,17 @@ module.exports = function(config) {
         base: 'SauceLabs',
         browserName: 'firefox'
       },
-      "SL_Safari_5": {
-        base: "SauceLabs",
-        browserName: "Safari",
-        platform: "OS X 10.6",
-        version: "5"
-      },
-      "SL_Safari_6": {
-        base: "SauceLabs",
-        browserName: "Safari",
-        platform: "OS X 10.8",
-        version: "6"
-      },
-      "SL_Safari_7": {
-        base: "SauceLabs",
-        browserName: "Safari",
-        platform: "OS X 10.9",
-        version: "7"
-      },
-      "SL_Safari_8": {
+      "SL_Safari": {
         base: "SauceLabs",
         browserName: "Safari",
         platform: "OS X 10.10",
         version: "8"
+      },
+      'SL_IE_8': {
+        base: 'SauceLabs',
+        browserName: 'internet explorer',
+        platform: 'Windows 7',
+        version: '8'
       },
       'SL_IE_9': {
         base: 'SauceLabs',
@@ -78,9 +59,29 @@ module.exports = function(config) {
         browserName: 'internet explorer',
         version: '11'
       }
-    },
-    sauceLabs: {
-      testName: 'DOM Seek'
     }
-  });
-};
+  })
+
+  try {
+    var sauceCredentials = require('./sauce.json')
+    process.env.SAUCE_USERNAME = sauceCredentials.username
+    process.env.SAUCE_ACCESS_KEY = sauceCredentials.accessKey
+  } catch (e) {
+    console.log('Note: run `git-crypt unlock` to use Sauce Labs credentials.')
+  }
+
+  if (process.env.npm_config_coverage) config.set({
+    browserify: {debug: true, transform: [istanbul, babelify]},
+    coverageReporter: {
+      reporters: [
+        {'type': 'lcov', 'dir': '../coverage'},
+        {'type': 'text'}
+      ]
+    },
+    reporters: ['progress', 'saucelabs', 'coverage', 'coveralls']
+  })
+
+  if (process.env.TRAVIS) config.set({
+    browsers: [process.env.BROWSER]
+  })
+}

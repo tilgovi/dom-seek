@@ -3,7 +3,8 @@
   "version": "1.0.1",
   "description": "Text traversal for HTML documents.",
   "scripts": {
-    "test": "karma start --single-run"
+    "test": "karma start --single-run",
+    "prepublish": "babel -d . -s inline -L all src"
   },
   "repository": {
     "type": "git",
@@ -20,36 +21,26 @@
     "url": "https://github.com/tilgovi/dom-seek/issues"
   },
   "homepage": "https://github.com/tilgovi/dom-seek",
-  "main": "dist/seek.js",
-  "browser": "seek.js",
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
-  },
+  "main": "index.js",
   "dependencies": {},
   "devDependencies": {
-    "babel": "^5.4.3",
-    "babelify": "^6.1.1",
-    "browserify": "^10.2.4",
-    "browserify-istanbul": "^0.2.1",
-    "chai": "^2.3.0",
-    "gulp": "^3.9.0",
-    "gulp-babel": "^5.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sourcemaps": "^1.5.2",
-    "gulp-uglify": "^1.2.0",
-    "karma": "^0.12.32",
-    "karma-browserify": "^4.2.1",
-    "karma-chai": "^0.1.0",
-    "karma-coverage": "^0.3.1",
-    "karma-fixture": "^0.2.4",
-    "karma-html2js-preprocessor": "^0.1.0",
-    "karma-mocha": "^0.1.10",
-    "karma-phantomjs-launcher": "^0.1.4",
-    "karma-sauce-launcher": "^0.2.11",
-    "karma-source-map-support": "^1.0.0",
-    "mocha": "^2.2.5",
-    "node-iterator-shim": "^2.0.0"
+    "assertive-chai": "^2.0.2",
+    "babel": "^5.8.23",
+    "babelify": "*",
+    "browserify": "^11.2.0",
+    "browserify-istanbul": "*",
+    "isparta": "^3.1.0",
+    "karma": "^0.12.37",
+    "karma-browserify": "^4.4.0",
+    "karma-coverage": "^0.5.3",
+    "karma-coveralls": "^1.1.2",
+    "karma-fixture": "*",
+    "karma-html2js-preprocessor": "*",
+    "karma-mocha": "^0.2.0",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "karma-sauce-launcher": "^0.3.0",
+    "mocha": "^2.3.3",
+    "node-iterator-shim": "^2.0.0",
+    "phantomjs": "^1.9.18"
   }
 }
