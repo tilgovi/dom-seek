@@ -27,7 +27,6 @@ export default function seek(iter, where) {
       backward: () => count > where
     };
   } else if (isText(where)) {
-    debugger
     let forward = before(node, where) ? () => false : () => node !== where
     let backward = () => node != where || !iter.pointerBeforeReferenceNode
     predicates = {forward, backward}
