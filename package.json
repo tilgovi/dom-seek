@@ -23,7 +23,8 @@
   "homepage": "https://github.com/tilgovi/dom-seek",
   "main": "index.js",
   "dependencies": {
-    "ancestors": "0.0.3"
+    "ancestors": "0.0.3",
+    "index-of": "^0.2.0"
   },
   "devDependencies": {
     "assertive-chai": "^2.0.2",
@@ -31,9 +32,7 @@
     "babelify": "*",
     "browserify": "^11.2.0",
     "browserify-istanbul": "*",
-    "core-js": "^1.2.3",
     "dom-node-iterator": "^3.1.2",
-    "is-ie8": "^1.0.2",
     "isparta": "^3.1.0",
     "karma": "^0.12.37",
     "karma-browserify": "^4.4.0",

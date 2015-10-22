@@ -1,4 +1,5 @@
 import ancestors from 'ancestors'
+import indexOf from 'index-of'
 
 const E_SHOW = 'Argument 1 of seek must use filter NodeFilter.SHOW_TEXT.'
 const E_WHERE = 'Argument 2 of seek must be a number or a Text Node.'
@@ -72,7 +73,8 @@ function before(ref, node) {
   if (left == null) return false
   if (right == null) return true
 
-  let l = Array.prototype.indexOf.call(common.childNodes, left)
-  let r = Array.prototype.indexOf.call(common.childNodes, right)
+  let l = indexOf(common.childNodes, left)
+  let r = indexOf(common.childNodes, right)
+
   return l > r
 }
