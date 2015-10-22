@@ -1,9 +1,9 @@
-import createNodeIterator from 'node-iterator-shim';
 import seek from '../../src';
 
 
 function createIter(whatToShow = NodeFilter.SHOW_TEXT) {
-  return createNodeIterator(fixture.el, whatToShow);
+  let document = fixture.el.ownerDocument;
+  return document.createNodeIterator(fixture.el, whatToShow);
 }
 
 

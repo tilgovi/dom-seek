@@ -40,7 +40,7 @@
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-sauce-launcher": "^0.3.0",
     "mocha": "^2.3.3",
-    "node-iterator-shim": "^2.0.0",
+    "dom-node-iterator": "^3.1.2",
     "phantomjs": "^1.9.18"
   }
 }
