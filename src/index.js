@@ -13,45 +13,45 @@ const DOCUMENT_POSITION_FOLLOWING = 4
 
 export default function seek(iter, where) {
   if (iter.whatToShow !== SHOW_TEXT) {
-    throw new Error(E_SHOW);
+    throw new Error(E_SHOW)
   }
 
-  let count = 0;
-  let node = iter.referenceNode;
-  let predicates = null;
+  let count = 0
+  let node = iter.referenceNode
+  let predicates = null
 
   if (isNumber(where)) {
     predicates = {
       forward: () => count < where,
-      backward: () => count > where
-    };
+      backward: () => count > where,
+    }
   } else if (isText(where)) {
     let forward = before(node, where) ? () => false : () => node !== where
     let backward = () => node != where || !iter.pointerBeforeReferenceNode
     predicates = {forward, backward}
   } else {
-    throw new Error(E_WHERE);
+    throw new Error(E_WHERE)
   }
 
   while (predicates.forward() && (node = iter.nextNode()) !== null) {
-    count += node.nodeValue.length;
+    count += node.nodeValue.length
   }
 
   while (predicates.backward() && (node = iter.previousNode()) !== null) {
-    count -= node.nodeValue.length;
+    count -= node.nodeValue.length
   }
 
-  return count;
+  return count
 }
 
 
 function isNumber(n) {
-  return !isNaN(parseInt(n)) && isFinite(n);
+  return !isNaN(parseInt(n)) && isFinite(n)
 }
 
 
 function isText(node) {
-  return node.nodeType === TEXT_NODE;
+  return node.nodeType === TEXT_NODE
 }
 
 
