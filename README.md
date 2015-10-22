@@ -18,15 +18,16 @@ document:
 Installation
 ============
 
-There are a few different ways to include the library.
-
-With a CommonJS bundler to `require('dom-seek')`:
+Using npm:
 
     npm install dom-seek
 
-With a script tag, include one of the scripts from the `dist` directory.
+Compatibility Notes
+===================
 
-With AMD loaders, these scripts should also work.
+- Use the `dom-node-iterator` for a portable `NodeIterator` polyfill.
+
+- Use `es5-shim`, `core-js` or similar for IE8 compatibility.
 
 Usage
 =====
