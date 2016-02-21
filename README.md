@@ -22,13 +22,6 @@ Using npm:
 
     npm install dom-seek
 
-Compatibility Note
-==================
-
-Use the `dom-node-iterator` for a portable `NodeIterator` polyfill if targeting
-browsers that lack a full implementation that includes the `referenceNode` and
-`pointerBeforeReferenceNode` properties.
-
 Usage
 =====
 
@@ -37,6 +30,10 @@ Usage
 The `iter` argument must be a `NodeIterator`
 ([docs](https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator))
 instance with a `whatToShow` property equal to `NodeFilter.SHOW_TEXT`.
+
+Use the `dom-node-iterator` module for a portable `NodeIterator` polyfill if
+targeting browsers that lack a full implementation that includes the
+`referenceNode` and `pointerBeforeReferenceNode` properties.
 
 The `where` argument is an integer, else an `Element` or `Text` node.
 

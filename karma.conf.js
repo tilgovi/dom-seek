@@ -1,24 +1,18 @@
-var babelify = require('babelify').configure({loose: 'all'})
-var isparta = require('isparta')
-var istanbul = require('browserify-istanbul')({
-  instrumenter: isparta,
-  instrumenterConfig: {babel: {loose: 'all'}}
-})
+var babelify = require('babelify')
+var istanbul = require('browserify-babel-istanbul')
 
 module.exports = function(config) {
   config.set({
-    basePath: 'test',
     browsers: ['PhantomJS'],
     browserify: {debug: true, transform: [babelify]},
-    frameworks: ['browserify', 'fixture', 'mocha'],
+    frameworks: ['browserify', 'chai', 'fixture', 'mocha'],
     files: [
-      'adapter.js',
-      'spec/fixtures/*.html',
-      'spec/*.js',
+      'test/*.js',
+      'test/fixtures/*.html',
     ],
     preprocessors: {
-      '**/*.js': ['browserify'],
-      '**/*.html': ['html2js']
+      'test/*.js': ['browserify'],
+      'test/fixtures/*.html': ['html2js']
     },
     reporters: ['progress', 'saucelabs'],
     sauceLabs: {testName: 'DOM Seek test'},
@@ -37,12 +31,6 @@ module.exports = function(config) {
         browserName: "Safari",
         platform: "OS X 10.10",
         version: "8"
-      },
-      'SL_IE_8': {
-        base: 'SauceLabs',
-        browserName: 'internet explorer',
-        platform: 'Windows 7',
-        version: '8'
       },
       'SL_IE_9': {
         base: 'SauceLabs',
@@ -72,12 +60,6 @@ module.exports = function(config) {
 
   if (process.env.npm_config_coverage) config.set({
     browserify: {debug: true, transform: [istanbul, babelify]},
-    coverageReporter: {
-      reporters: [
-        {'type': 'lcov', 'dir': '../coverage'},
-        {'type': 'text'}
-      ]
-    },
     reporters: ['progress', 'saucelabs', 'coverage', 'coveralls']
   })
 

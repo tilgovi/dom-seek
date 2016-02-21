@@ -1,16 +1,13 @@
-import seek from '../../src'
+import seek from '../src'
+import createNodeIterator from 'dom-node-iterator'
 
 const SHOW_TEXT = 4
-
-function createIter(whatToShow = SHOW_TEXT) {
-  let document = fixture.el.ownerDocument
-  return document.createNodeIterator(fixture.el, whatToShow)
-}
 
 
 describe('seek', function () {
   let fixtureText = null
 
+  before(() => fixture.setBase('test/fixtures'))
   before(() => fixture.load('test.html'))
   before(() => fixtureText = fixture.el.textContent || fixture.el.innerText)
   after(() => fixture.cleanup())
@@ -21,31 +18,31 @@ describe('seek', function () {
 
   describe('argument 1', function () {
     it('must use `NodeFilter.SHOW_TEXT`', function () {
-      let iter = createIter(0xFFFFFFFF)
+      let iter = createNodeIterator(fixture.el, 0xFFFFFFFF)
       assert.throws(() => seek(iter, 0), /NodeFilter.SHOW_TEXT/)
     })
   })
 
   describe('argument 2', function () {
     it('can be a number', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       assert.doesNotThrow(() => seek(iter, 0))
     })
 
     it('can be a `Text` node', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let node = iter.nextNode()
       assert.doesNotThrow(() => seek(iter, node))
     })
 
     it('cannot be any other type of node', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let node = iter.nextNode()
       assert.throws(() => seek(iter, document.body))
     })
 
     it('cannot be anything else', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let node = iter.nextNode()
       assert.throws(() => seek(iter, 'bogus'))
     })
@@ -53,12 +50,12 @@ describe('seek', function () {
 
   describe('by a number', function () {
     it('accepts zero as an argument', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       assert.doesNotThrow(() => seek(iter, 0))
     })
 
     it('stops when traversing past the beginning', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let count = seek(iter, -100)
       assert.equal(count, 0)
       assert.strictEqual(iter.referenceNode, iter.root)
@@ -66,7 +63,7 @@ describe('seek', function () {
     })
 
     it('stops when traversing past the end', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let p = fixture.el.childNodes[0]
       let node = p.childNodes[p.childNodes.length-1]
       let count = seek(iter, fixtureText.length + 100)
@@ -75,7 +72,7 @@ describe('seek', function () {
     })
 
     it('seeks to that offset if it marks the start of a node', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let text = 'Aenean ultricies mi vitae est.'
       let offset = fixtureText.indexOf(text)
       let count = seek(iter, offset)
@@ -84,7 +81,7 @@ describe('seek', function () {
     })
 
     it('seeks to the nearest node', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let text = 'Aenean ultricies mi vitae est.'
       let offset = fixtureText.indexOf(text)
       let count = seek(iter, offset + 5)
@@ -94,7 +91,7 @@ describe('seek', function () {
     })
 
     it('seeks forwards and backwards', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let text = 'commodo vitae'
       let offset = fixtureText.indexOf(text)
 
@@ -112,7 +109,7 @@ describe('seek', function () {
 
   describe('to a node', function () {
     it('seeks to the given node', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let node = fixture.el.getElementsByTagName('code')[0].childNodes[0]
       let offset = fixtureText.indexOf(node.nodeValue)
       let count = seek(iter, node)
@@ -122,7 +119,7 @@ describe('seek', function () {
     })
 
     it('seeks forwards and backwards', function () {
-      let iter = createIter()
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let code = fixture.el.getElementsByTagName('code')[0].childNodes[0]
       let strong = fixture.el.getElementsByTagName('strong')[0].childNodes[0]
       seek(iter, code)
