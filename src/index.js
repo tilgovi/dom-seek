@@ -7,9 +7,6 @@ const E_WHERE = 'Argument 2 of seek must be a number or a Text Node.'
 const SHOW_TEXT = 4
 const TEXT_NODE = 3
 
-const DOCUMENT_POSITION_PRECEDING = 2
-const DOCUMENT_POSITION_FOLLOWING = 4
-
 
 export default function seek(iter, where) {
   if (iter.whatToShow !== SHOW_TEXT) {
