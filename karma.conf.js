@@ -58,7 +58,7 @@ module.exports = function(config) {
     console.log('Note: run `git-crypt unlock` to use Sauce Labs credentials.')
   }
 
-  if (process.env.npm_config_coverage) config.set({
+  if (process.env.COVERAGE) config.set({
     browserify: {debug: true, transform: [istanbul, babelify]},
     reporters: ['progress', 'saucelabs', 'coverage', 'coveralls']
   })
