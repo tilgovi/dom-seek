@@ -1,6 +1,6 @@
 {
   "name": "dom-seek",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Text traversal for HTML documents.",
   "main": "index.js",
   "scripts": {
