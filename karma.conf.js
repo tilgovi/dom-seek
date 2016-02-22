@@ -60,7 +60,8 @@ module.exports = function(config) {
 
   if (process.env.npm_config_coverage) config.set({
     browserify: {debug: true, transform: [istanbul, babelify]},
-    reporters: ['progress', 'saucelabs', 'coverage', 'coveralls']
+    reporters: ['progress', 'saucelabs', 'coverage', 'coveralls'],
+    coverageReporter: {type: 'lcov'}
   })
 
   if (process.env.TRAVIS) config.set({
