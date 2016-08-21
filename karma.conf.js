@@ -1,10 +1,7 @@
-var babelify = require('babelify')
-var istanbul = require('browserify-babel-istanbul')
-
 module.exports = function(config) {
   config.set({
     browsers: ['PhantomJS'],
-    browserify: {debug: true, transform: [babelify]},
+    browserify: {debug: true, transform: ['babelify']},
     frameworks: ['browserify', 'chai', 'fixture', 'mocha'],
     files: [
       'test/*.js',
@@ -59,7 +56,6 @@ module.exports = function(config) {
   }
 
   if (process.env.COVERAGE) config.set({
-    browserify: {debug: true, transform: [istanbul, babelify]},
     reporters: ['progress', 'saucelabs', 'coverage']
   })
 
