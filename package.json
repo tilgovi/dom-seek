@@ -53,8 +53,12 @@
   "babel": {
     "env": {
       "test": {
-        "plugins": ["istanbul"],
-        "presets": ["es2015"]
+        "plugins": [
+          "istanbul"
+        ],
+        "presets": [
+          "es2015"
+        ]
       }
     },
     "presets": [
