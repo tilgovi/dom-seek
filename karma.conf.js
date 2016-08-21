@@ -11,7 +11,15 @@ module.exports = function(config) {
       'test/*.js': ['browserify'],
       'test/fixtures/*.html': ['html2js']
     },
-    reporters: ['progress', 'saucelabs'],
+    reporters: ['progress', 'saucelabs', 'coverage'],
+    coverageReporter: {
+      reporters: [
+        {type: 'html', subdir: '.'},
+        {type: 'json', subdir: '.'},
+        {type: 'lcovonly', subdir: '.'},
+        {type: 'text', subdir: '.'}
+      ]
+    },
     sauceLabs: {testName: 'DOM Seek test'},
 
     customLaunchers: {
@@ -55,16 +63,7 @@ module.exports = function(config) {
     console.log('Note: run `git-crypt unlock` to use Sauce Labs credentials.')
   }
 
-  if (process.env.COVERAGE) config.set({
-    reporters: ['progress', 'saucelabs', 'coverage']
-  })
-
   if (process.env.TRAVIS) config.set({
     browsers: [process.env.BROWSER],
-  })
-
-  if (process.env.COVERAGE && process.env.TRAVIS) config.set({
-    reporters: ['progress', 'saucelabs', 'coverage', 'coveralls'],
-    coverageReporter: {type: 'lcov'}
   })
 }
