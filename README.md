@@ -8,10 +8,9 @@ DOM Seek
 
 POSIX has `lseek(2)`. Now the browser has `dom-seek`.
 
-This library can answer two kinds of questions about character offsets in a
-document:
+This library can answer two questions:
 
-- What is the offset of the given `TextNode` within a text?
+- What is the offset of a given `TextNode` within a text?
 
 - Which `TextNode` within a text contains the given offset?
 
