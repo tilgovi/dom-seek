@@ -27,6 +27,7 @@
     "index-of": "^0.2.0"
   },
   "devDependencies": {
+    "assertive-chai": "^2.0.2",
     "babel-cli": "^6.5.1",
     "babel-eslint": "^6.1.2",
     "babel-plugin-istanbul": "^2.0.0",
@@ -36,13 +37,11 @@
     "babel-preset-es2015-loose": "^8.0.0",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
-    "chai": "^3.5.0",
     "codecov.io": "^0.1.6",
     "dom-node-iterator": "^3.5.0",
     "eslint": "^3.3.1",
     "karma": "^1.2.0",
     "karma-browserify": "^5.0.1",
-    "karma-chai": "^0.1.0",
     "karma-coverage": "^1.1.1",
     "karma-fixture": "^0.2.6",
     "karma-html2js-preprocessor": "^1.0.0",

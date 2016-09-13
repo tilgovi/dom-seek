@@ -2,7 +2,7 @@ module.exports = function(config) {
   config.set({
     browsers: ['PhantomJS'],
     browserify: {debug: true, transform: ['babelify']},
-    frameworks: ['browserify', 'chai', 'fixture', 'mocha'],
+    frameworks: ['browserify', 'fixture', 'mocha'],
     files: [
       'test/*.js',
       'test/fixtures/*.html',
