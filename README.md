@@ -26,15 +26,7 @@ Usage
 
 ## `seek(iter, where)`
 
-The `iter` argument must be a `NodeIterator`
-([docs](https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator))
-instance with a `whatToShow` property equal to `NodeFilter.SHOW_TEXT`.
-
-Use the `dom-node-iterator` module for a portable `NodeIterator` polyfill if
-targeting browsers that lack a full implementation that includes the
-`referenceNode` and `pointerBeforeReferenceNode` properties.
-
-The `where` argument is an integer, else an `Element` or `Text` node.
+Adjust the position of a [`NodeIterator`].
 
 If the argument is an integer, seeks the iterator forward (if `where` is
 positive) or backward (if `where` is negative) until `where` text code units
@@ -52,6 +44,15 @@ traversal causes the iterator to move backward.
 Raises `InvalidStateError` when the root node of the iterator contains no text
 or `iter` is not a `NodeIterator` with a `whatToShow` property equal to
 `NodeFilter.SHOW_TEXT`.
+
+[`NodeIterator`]: https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator
+
+Browser Support
+===============
+
+Use the `dom-node-iterator` module for a portable `NodeIterator` polyfill if
+targeting browsers that lack a full implementation that includes the
+`referenceNode` and `pointerBeforeReferenceNode` properties.
 
 Example
 =======
@@ -77,13 +78,16 @@ var iter = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT);
 // contains the destination if it does not fall exactly at a text node boundary.
 function split(where) {
   var count = seek(iter, where);
-  if (count != where) {
-    // Split the text at the offset
-    iter.referenceNode.splitText(where - count);
+  var remainder = where - count;
 
-    // Seek to the exact offset.
-    seek(iter, where - count);
+  if (remainder) {
+    // Split the text at the offset
+    iter.referenceNode.splitText(remainder);
+
+    // Seek to the exact offset
+    seek(iter, remainder);
   }
+
   return iter.referenceNode;
 }
 
@@ -92,9 +96,9 @@ var start = split(offset);
 var end = split(length);
 
 // Walk backwards, collecting all the nodes
-var nodes = [];
-while (iter.referenceNode !== start && !iter.pointerBeforeReferenceNode) {
-  nodes.push(iter.previousNode());
+var nodes = [end];
+while (iter.referenceNode !== start) {
+  nodes.unshift(iter.previousNode());
 }
 
 // Highlight all the nodes.
@@ -102,8 +106,7 @@ for (var i = 0 ; i < nodes.length ; i++) {
   var node = nodes[i];
 
   // Create a highlight
-  var highlight = document.createElement('span');
-  highlight.classList.add('annotator-hl');
+  var highlight = document.createElement('mark');
 
   // Wrap it around the text node
   node.parentNode.replaceChild(highlight, node);
