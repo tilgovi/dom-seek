@@ -11,14 +11,14 @@ const TEXT_NODE = 3
 
 export default function seek(iter, where) {
   if (iter.whatToShow !== SHOW_TEXT) {
-    throw new Error(E_SHOW);
+    throw new DOMException(E_SHOW, 'InvalidStateError');
   }
 
   if (iter.referenceNode.nodeType !== TEXT_NODE) {
     iter.nextNode();
     iter.previousNode();
     if (iter.referenceNode.nodeType !== TEXT_NODE) {
-      throw new Error(E_EMPTY);
+      throw new DOMException(E_EMPTY, 'InvalidStateError');
     }
   }
 
@@ -36,7 +36,7 @@ export default function seek(iter, where) {
     let backward = () => node != where || !iter.pointerBeforeReferenceNode
     predicates = {forward, backward}
   } else {
-    throw new Error(E_WHERE);
+    throw new TypeError(E_WHERE);
   }
 
   while (predicates.forward() && (node = iter.nextNode()) !== null) {
@@ -81,3 +81,17 @@ function before(ref, node) {
 
   return l > r
 }
+
+
+function DOMException(message, name) {
+  this.message = message
+  this.stack = (new Error()).stack
+  this.name = name
+  this.code = {
+    InvalidStateError: 11,
+  }[name]
+  this.toString = function () {
+    return name + ': ' + message
+  }
+}
+DOMException.prototype = new Error

@@ -49,8 +49,8 @@ After seeking, the iterator will refer to the point before its reference node
 Returns the change in the offset. Note that this will be negative when the
 traversal causes the iterator to move backward.
 
-Raises an error when the root node of the iterator contains no text or `iter` is
-not a `NodeIterator` with a `whatToShow` property equal to
+Raises `InvalidStateError` when the root node of the iterator contains no text
+or `iter` is not a `NodeIterator` with a `whatToShow` property equal to
 `NodeFilter.SHOW_TEXT`.
 
 Example
