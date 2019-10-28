@@ -1,6 +1,7 @@
 import ancestors from 'ancestors'
 import indexOf from 'index-of'
 
+const E_EMPTY = 'Argument 1 of seek must have a root that contains text.'
 const E_SHOW = 'Argument 1 of seek must use filter NodeFilter.SHOW_TEXT.'
 const E_WHERE = 'Argument 2 of seek must be a number or a Text Node.'
 
@@ -10,7 +11,15 @@ const TEXT_NODE = 3
 
 export default function seek(iter, where) {
   if (iter.whatToShow !== SHOW_TEXT) {
-    throw new Error(E_SHOW)
+    throw new Error(E_SHOW);
+  }
+
+  if (iter.referenceNode.nodeType !== TEXT_NODE) {
+    iter.nextNode();
+    iter.previousNode();
+    if (iter.referenceNode.nodeType !== TEXT_NODE) {
+      throw new Error(E_EMPTY);
+    }
   }
 
   let count = 0
@@ -27,7 +36,7 @@ export default function seek(iter, where) {
     let backward = () => node != where || !iter.pointerBeforeReferenceNode
     predicates = {forward, backward}
   } else {
-    throw new Error(E_WHERE)
+    throw new Error(E_WHERE);
   }
 
   while (predicates.forward() && (node = iter.nextNode()) !== null) {

@@ -21,6 +21,13 @@ describe('seek', function () {
       let iter = createNodeIterator(fixture.el, 0xFFFFFFFF)
       assert.throws(() => seek(iter, 0), /NodeFilter.SHOW_TEXT/)
     })
+
+    it('must refer to a root node with text content', function () {
+      let document = fixture.el.ownerDocument;
+      let root = document.createElement('div');
+      let iter = createNodeIterator(root, SHOW_TEXT)
+      assert.throws(() => seek(iter, 0), /root/);
+    })
   })
 
   describe('argument 2', function () {
@@ -44,7 +51,7 @@ describe('seek', function () {
     it('cannot be anything else', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let node = iter.nextNode()
-      assert.throws(() => seek(iter, 'bogus'))
+      assert.throws(() => seek(iter, 'bogus'), /number/)
     })
   })
 
