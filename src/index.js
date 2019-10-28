@@ -19,8 +19,8 @@ export default function seek(iter, where) {
 
   if (isNumber(where)) {
     predicates = {
-      forward: () => count < where,
-      backward: () => count > where,
+      forward: () => count <= where,
+      backward: () => count > where || !iter.pointerBeforeReferenceNode,
     }
   } else if (isText(where)) {
     let forward = before(node, where) ? () => false : () => node !== where

@@ -51,14 +51,19 @@ describe('seek', function () {
   describe('by a number', function () {
     it('accepts zero as an argument', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let p = fixture.el.childNodes[0]
+      let node = p.childNodes[0].childNodes[0];
       assert.doesNotThrow(() => seek(iter, 0))
+      assert.strictEqual(iter.referenceNode, node)
+      assert.isTrue(iter.pointerBeforeReferenceNode)
     })
 
     it('stops when traversing past the beginning', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
-      let count = seek(iter, -100)
-      assert.equal(count, 0)
-      assert.strictEqual(iter.referenceNode, iter.root)
+      let p = fixture.el.childNodes[0]
+      let node = p.childNodes[0].childNodes[0];
+      seek(iter, -100)
+      assert.strictEqual(iter.referenceNode, node)
       assert.isTrue(iter.pointerBeforeReferenceNode)
     })
 
@@ -66,9 +71,9 @@ describe('seek', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let p = fixture.el.childNodes[0]
       let node = p.childNodes[p.childNodes.length-1]
-      let count = seek(iter, fixtureText.length + 100)
+      seek(iter, fixtureText.length + 100)
       assert.strictEqual(iter.referenceNode, node)
-      assert.isFalse(iter.pointerBeforeReferenceNode)
+      assert.isTrue(iter.pointerBeforeReferenceNode)
     })
 
     it('seeks to that offset if it marks the start of a node', function () {
@@ -77,7 +82,8 @@ describe('seek', function () {
       let offset = fixtureText.indexOf(text)
       let count = seek(iter, offset)
       assert.equal(count, offset)
-      assert.equal(iter.nextNode().nodeValue, text)
+      assert.equal(iter.referenceNode.nodeValue, text)
+      assert.isTrue(iter.pointerBeforeReferenceNode)
     })
 
     it('seeks to the nearest node', function () {
@@ -95,10 +101,12 @@ describe('seek', function () {
       let text = 'commodo vitae'
       let offset = fixtureText.indexOf(text)
 
-      let end = seek(iter, offset + text.length)
-      assert.equal(end, offset + text.length)
+      let end = seek(iter, offset)
+      assert.equal(end, offset)
       assert.equal(iter.referenceNode.nodeValue, text)
-      assert.isFalse(iter.pointerBeforeReferenceNode)
+      assert.isTrue(iter.pointerBeforeReferenceNode)
+
+      iter.nextNode();
 
       let count = seek(iter, -(text.length - 3))
       assert.equal(count, -text.length)
@@ -128,6 +136,7 @@ describe('seek', function () {
       let count = seek(iter, strong)
       let expected = to - from
       assert.equal(count, expected)
+      assert.isTrue(iter.pointerBeforeReferenceNode)
     })
   })
 })

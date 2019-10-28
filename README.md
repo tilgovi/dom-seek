@@ -37,12 +37,14 @@ targeting browsers that lack a full implementation that includes the
 The `where` argument is an integer, else an `Element` or `Text` node.
 
 If the argument is an integer, seeks the iterator forward (if `where` is
-positive) or backward (if `where` is negative) until `where` characters have
-been traversed or the traversal ends. The iterator may be left with its pointer
-either before or after the reference node.
+positive) or backward (if `where` is negative) until `where` text code units
+have been traversed or the iterator is exhausted.
 
 If the argument is a node, seeks the iterator forward or backward until its
-pointer is positioned immediately before the given node.
+pointer is positioned immediately before the target node.
+
+After seeking, the iterator will refer to the point before its reference node
+(its `pointerBeforeReferencNode` property will be `true`).
 
 Returns the change in the offset. Note that this will be negative when the
 traversal causes the iterator to move backward.
