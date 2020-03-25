@@ -1,7 +1,7 @@
 import ancestors from 'ancestors'
 import indexOf from 'index-of'
 
-const E_EMPTY = 'Argument 1 of seek must have a root that contains text.'
+const E_END = 'Iterator exhausted before seek ended.'
 const E_SHOW = 'Argument 1 of seek must use filter NodeFilter.SHOW_TEXT.'
 const E_WHERE = 'Argument 2 of seek must be a number or a Text Node.'
 
@@ -14,21 +14,13 @@ export default function seek(iter, where) {
     throw new DOMException(E_SHOW, 'InvalidStateError');
   }
 
-  if (iter.referenceNode.nodeType !== TEXT_NODE) {
-    iter.nextNode();
-    iter.previousNode();
-    if (iter.referenceNode.nodeType !== TEXT_NODE) {
-      throw new DOMException(E_EMPTY, 'InvalidStateError');
-    }
-  }
-
   let count = 0
   let node = iter.referenceNode
   let predicates = null
 
   if (isNumber(where)) {
     predicates = {
-      forward: () => count <= where,
+      forward: () => count < where,
       backward: () => count > where || !iter.pointerBeforeReferenceNode,
     }
   } else if (isText(where)) {
@@ -39,11 +31,27 @@ export default function seek(iter, where) {
     throw new TypeError(E_WHERE);
   }
 
-  while (predicates.forward() && (node = iter.nextNode()) !== null) {
+  while (predicates.forward()) {
+    node = iter.nextNode();
+
+    if (node === null) {
+      throw new DOMException(E_END, 'IndexSizeError');
+    }
+
     count += node.nodeValue.length
   }
 
-  while (predicates.backward() && (node = iter.previousNode()) !== null) {
+  if (iter.nextNode()) {
+    node = iter.previousNode()
+  }
+
+  while (predicates.backward()) {
+    node = iter.previousNode();
+
+    if (node === null) {
+      throw new DOMException(E_END, 'IndexSizeError');
+    }
+
     count -= node.nodeValue.length
   }
 
@@ -88,6 +96,7 @@ function DOMException(message, name) {
   this.stack = (new Error()).stack
   this.name = name
   this.code = {
+    IndexSizeError: 1,
     InvalidStateError: 11,
   }[name]
   this.toString = function () {

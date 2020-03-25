@@ -26,7 +26,7 @@ describe('seek', function () {
       let document = fixture.el.ownerDocument;
       let root = document.createElement('div');
       let iter = createNodeIterator(root, SHOW_TEXT)
-      assert.throws(() => seek(iter, 0), /root/);
+      assert.throws(() => seek(iter, 0), /exhausted/);
     })
   })
 
@@ -67,23 +67,15 @@ describe('seek', function () {
 
     it('stops when traversing past the beginning', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
-      let p = fixture.el.childNodes[0]
-      let node = p.childNodes[0].childNodes[0];
-      seek(iter, -100)
-      assert.strictEqual(iter.referenceNode, node)
-      assert.isTrue(iter.pointerBeforeReferenceNode)
+      assert.throws(() => seek(iter, -100), /exhausted/)
     })
 
     it('stops when traversing past the end', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
-      let p = fixture.el.childNodes[0]
-      let node = p.childNodes[p.childNodes.length-1]
-      seek(iter, fixtureText.length + 100)
-      assert.strictEqual(iter.referenceNode, node)
-      assert.isTrue(iter.pointerBeforeReferenceNode)
+      assert.throws(() => seek(iter, fixtureText.length + 100), /exhausted/)
     })
 
-    it('seeks to that offset if it marks the start of a node', function () {
+    it('seeks to the start of a node', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let text = 'Aenean ultricies mi vitae est.'
       let offset = fixtureText.indexOf(text)
@@ -103,6 +95,14 @@ describe('seek', function () {
       assert.isTrue(iter.pointerBeforeReferenceNode)
     })
 
+    it('seeks to the last node', function () {
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let text = ' in turpis pulvinar facilisis. Ut\n  felis.'
+      let count = seek(iter, fixtureText.length)
+      assert.equal(count, fixtureText.length - text.length)
+      assert.equal(iter.referenceNode.nodeValue, text)
+    })
+
     it('seeks forwards and backwards', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let text = 'commodo vitae'
@@ -120,6 +120,30 @@ describe('seek', function () {
       assert.equal(iter.referenceNode.nodeValue, text)
       assert.isTrue(iter.pointerBeforeReferenceNode)
     })
+
+    it('seeks from after the iterator reference node', function () {
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let text = 'Aenean ultricies mi vitae est.'
+      let offset = fixtureText.indexOf(text)
+      let count = seek(iter, offset)
+      assert.equal(count, offset)
+      assert.equal(iter.referenceNode.nodeValue, text)
+      assert.isTrue(iter.pointerBeforeReferenceNode)
+
+      let node = iter.nextNode()
+      let nextNode = iter.nextNode()
+
+      seek(iter, node)
+      iter.previousNode()
+      iter.nextNode()
+      seek(iter, text.length)
+      assert.equal(iter.referenceNode, nextNode)
+
+      seek(iter, node)
+      iter.nextNode()
+      seek(iter, -text.length)
+      assert.equal(iter.referenceNode, node)
+    });
   })
 
   describe('to a node', function () {

@@ -26,24 +26,33 @@ Usage
 
 ## `seek(iter, where)`
 
-Adjust the position of a [`NodeIterator`].
+Adjust the position of a [`NodeIterator`] by an offset measured in text code
+units or to the position immediately before a target node.
 
-If the argument is an integer, seeks the iterator forward (if `where` is
-positive) or backward (if `where` is negative) until `where` text code units
-have been traversed or the iterator is exhausted.
+If `where` is a positive integer, seek the iterator forward until the sum of
+the text code unit lengths of all nodes that the iterator traverses is as close
+as possible to `where` without exceeding it.
 
-If the argument is a node, seeks the iterator forward or backward until its
-pointer is positioned immediately before the target node.
+If `where` is a negative integer, seek the iterator backward until the sum of
+the text code unit lengths of all nodes that the iterator traverses is as close
+as possible to the positive value of `where` without exceeding it.
 
-After seeking, the iterator will refer to the point before its reference node
-(its `pointerBeforeReferencNode` property will be `true`).
+If `where` is a node, seek the iterator forward or backward until its pointer is
+positioned immediately before the target node.
 
-Returns the change in the offset. Note that this will be negative when the
-traversal causes the iterator to move backward.
+Return the number of text code units between the initial and final iterator
+positions. This number will be negative when the traversal causes the iterator
+to traverse backward in document order.
 
-Raises `InvalidStateError` when the root node of the iterator contains no text
-or `iter` is not a `NodeIterator` with a `whatToShow` property equal to
-`NodeFilter.SHOW_TEXT`.
+After this function returns, the `pointerBeforeReferencNode` property of the
+iterator should be `true`. The function may return a value less than `where` if
+returning `where` exactly would result in the iterator pointing after the last
+text node that its root node contains.
+
+Raise `InvalidStateError` when the root node of the iterator contains no text,
+the `whatToShow` property of the iterator is not `NodeFilter.SHOW_TEXT`, or when
+the `where` argument specifies a traversal beyond the bounds of the root node of
+the iterator.
 
 [`NodeIterator`]: https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator
 
