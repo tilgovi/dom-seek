@@ -42,7 +42,7 @@ module.exports = function(config) {
       'SL_IE_8': {
         base: 'SauceLabs',
         browserName: 'internet explorer',
-        version: '8'
+        version: '11'
       }
     }
   })
