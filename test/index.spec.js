@@ -40,9 +40,16 @@ describe('seek', function () {
   })
 
   describe('argument 2', function () {
-    it('can be a number', function () {
+    it('can be an integer', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       assert.doesNotThrow(() => seek(iter, 0))
+    })
+
+    it('can not be any other number', function () {
+      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      assert.throws(() => seek(iter, 5.2))
+      assert.throws(() => seek(iter, NaN))
+      assert.throws(() => seek(iter, Infinity))
     })
 
     it('can be a `Text` node', function () {
@@ -60,7 +67,7 @@ describe('seek', function () {
     it('cannot be anything else', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let node = iter.nextNode()
-      assert.throws(() => seek(iter, 'bogus'), /number/)
+      assert.throws(() => seek(iter, 'bogus'), TypeError)
     })
   })
 

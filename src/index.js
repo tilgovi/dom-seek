@@ -1,6 +1,6 @@
 const E_END = 'Iterator exhausted before seek ended.'
 const E_SHOW = 'Argument 1 of seek must use filter NodeFilter.SHOW_TEXT.'
-const E_WHERE = 'Argument 2 of seek must be a number or a Text Node.'
+const E_WHERE = 'Argument 2 of seek must be an integer or a Text Node.'
 
 const DOCUMENT_POSITION_PRECEDING = 2
 const SHOW_TEXT = 4
@@ -16,7 +16,7 @@ export default function seek(iter, where) {
   let node = iter.referenceNode
   let predicates = null
 
-  if (isNumber(where)) {
+  if (isInteger(where)) {
     predicates = {
       forward: () => count < where,
       backward: () => count > where || !iter.pointerBeforeReferenceNode,
@@ -57,8 +57,9 @@ export default function seek(iter, where) {
 }
 
 
-function isNumber(n) {
-  return !isNaN(parseInt(n)) && isFinite(n)
+function isInteger(n) {
+  if (typeof n !== 'number') return false;
+  return isFinite(n) && Math.floor(n) === n;
 }
 
 
