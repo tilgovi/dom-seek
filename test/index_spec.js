@@ -9,7 +9,7 @@ describe('seek', function () {
 
   before(() => fixture.setBase('test/fixtures'))
   before(() => fixture.load('test.html'))
-  before(() => fixtureText = fixture.el.textContent || fixture.el.innerText)
+  before(() => fixtureText = fixture.el.textContent)
   after(() => fixture.cleanup())
 
   it('is a function', function () {
