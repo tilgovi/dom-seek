@@ -4,8 +4,9 @@
   "description": "Text traversal for HTML documents.",
   "main": "index.js",
   "scripts": {
+    "build": "babel -d lib src",
     "test": "eslint src && BABEL_ENV=test nyc mocha",
-    "prepublish": "babel -d lib src"
+    "prepublish": "yarn run build"
   },
   "repository": {
     "type": "git",
