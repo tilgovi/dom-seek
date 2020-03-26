@@ -81,6 +81,7 @@
     "extends": "@istanbuljs/nyc-config-babel",
     "reporter": [
       "html",
+      "lcov",
       "text"
     ]
   }
