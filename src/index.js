@@ -1,10 +1,8 @@
-import ancestors from 'ancestors'
-import indexOf from 'index-of'
-
 const E_END = 'Iterator exhausted before seek ended.'
 const E_SHOW = 'Argument 1 of seek must use filter NodeFilter.SHOW_TEXT.'
 const E_WHERE = 'Argument 2 of seek must be a number or a Text Node.'
 
+const DOCUMENT_POSITION_PRECEDING = 2
 const SHOW_TEXT = 4
 const TEXT_NODE = 3
 
@@ -70,24 +68,7 @@ function isText(node) {
 
 
 function before(ref, node) {
-  if (ref === node) return false
-
-  let common = null
-  let left = [ref].concat(ancestors(ref)).reverse()
-  let right = [node].concat(ancestors(node)).reverse()
-
-  while (left[0] === right[0]) {
-    common = left.shift()
-    right.shift()
-  }
-
-  left = left[0]
-  right = right[0]
-
-  let l = indexOf(common.childNodes, left)
-  let r = indexOf(common.childNodes, right)
-
-  return l > r
+  return ref.compareDocumentPosition(node) & DOCUMENT_POSITION_PRECEDING
 }
 
 

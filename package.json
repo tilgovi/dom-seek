@@ -22,10 +22,6 @@
     "url": "https://github.com/tilgovi/dom-seek/issues"
   },
   "homepage": "https://github.com/tilgovi/dom-seek",
-  "dependencies": {
-    "ancestors": "0.0.3",
-    "index-of": "^0.2.0"
-  },
   "devDependencies": {
     "assertive-chai": "^2.0.2",
     "babel-cli": "^6.5.1",
