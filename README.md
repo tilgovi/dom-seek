@@ -78,7 +78,7 @@ var text = 'ipsum';
 
 // Find the text.
 var offset = document.body.textContent.indexOf(text);
-var length = text.length
+var length = text.length;
 
 // Create a NodeIterator.
 var iter = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT);
