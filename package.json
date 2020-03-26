@@ -4,7 +4,7 @@
   "description": "Text traversal for HTML documents.",
   "main": "index.js",
   "scripts": {
-    "build": "babel -d lib src",
+    "build": "babel src -d lib -s",
     "test": "eslint src && BABEL_ENV=test nyc mocha",
     "prepublish": "yarn run build"
   },
@@ -49,8 +49,7 @@
     },
     "presets": [
       "@babel/preset-env"
-    ],
-    "sourceMaps": "inline"
+    ]
   },
   "eslintConfig": {
     "env": {
