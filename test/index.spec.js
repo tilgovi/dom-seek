@@ -60,13 +60,13 @@ describe('seek', function () {
 
     it('cannot be any other type of node', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
-      let node = iter.nextNode()
+      iter.nextNode()
       assert.throws(() => seek(iter, document.body))
     })
 
     it('cannot be anything else', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
-      let node = iter.nextNode()
+      iter.nextNode()
       assert.throws(() => seek(iter, 'bogus'), TypeError)
     })
   })

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src -d lib -s",
-    "test": "eslint src && BABEL_ENV=test nyc mocha",
+    "test": "eslint src test && BABEL_ENV=test nyc mocha",
     "prepublish": "yarn run build"
   },
   "repository": {
@@ -59,7 +59,18 @@
     "parser": "babel-eslint",
     "rules": {
       "comma-dangle": 0
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "test/**/*.js"
+        ],
+        "env": {
+          "mocha": true,
+          "node": true
+        }
+      }
+    ]
   },
   "mocha": {
     "require": [
