@@ -1,16 +1,25 @@
-import seek from '../src'
+import { assert } from 'chai'
+import fs from 'fs'
+import path from 'path'
 import createNodeIterator from 'dom-node-iterator'
+import seek from '../src'
 
 const SHOW_TEXT = 4
 
+let fixturePath = path.join(__dirname, 'fixtures', 'test.html')
+let fixtureBuf = fs.readFileSync(fixturePath)
+let fixtureHTML = fixtureBuf.toString().trim()
+
 
 describe('seek', function () {
+  let fixture = null
   let fixtureText = null
 
-  before(() => fixture.setBase('test/fixtures'))
-  before(() => fixture.load('test.html'))
-  before(() => fixtureText = fixture.el.textContent)
-  after(() => fixture.cleanup())
+  before(() => {
+    fixture = { el: document.createElement('div') }
+    fixture.el.innerHTML = fixtureHTML
+    fixtureText = fixture.el.textContent
+  });
 
   it('is a function', function () {
     assert.isFunction(seek)

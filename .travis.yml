@@ -7,17 +7,6 @@ after_success:
 cache:
   directories:
   - node_modules
-env:
-  global:
-  - secure: DCC7uPFoB4lkWnrYjlsIJj1TbRT9AMWN/yJttKHrSGaAYa1BKsHzad9MWGxOZsVGjXvA6MVqai0P/DSbzTLOyJVXytioG6gi5okDTFSoPkgSB7lpnik+j4PY0CKMy9TlDcgO5wY1KsegYaZ/IWrw6M1nsEMECZ4xQtPP8HpaSgQ=
-  - secure: JVg99fHL7ru4wHwHu38ksI3qUGh72au5Cdtj//7SWWekE+HE+ZiZxX/H0/UX5Sf7bSsVXuZqLEnP1JFl7BCoHpaWm+4JPFkFV6CTvMCn26/8yixqOXZOy4xUDv/Ul1FeBYqxopbbO2IetfCBBX7A7aETKyutoFu/pTsIe5J9BaA=
-  matrix:
-  - BROWSER=PhantomJS
-  - BROWSER=SL_Chrome
-  - BROWSER=SL_Edge
-  - BROWSER=SL_Firefox
-  - BROWSER=SL_Safari
-  - BROWSER=SL_IE_8
 notifications:
   email: false
   irc:

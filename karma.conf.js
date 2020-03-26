@@ -1,6 +1,6 @@
 module.exports = function(config) {
   config.set({
-    browsers: ['PhantomJS'],
+    browsers: ['jsdom'],
     browserify: {debug: true, transform: ['babelify']},
     frameworks: ['browserify', 'fixture', 'mocha'],
     files: [
