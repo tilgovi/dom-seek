@@ -9,7 +9,7 @@ const TEXT_NODE = 3
 
 export default function seek(iter, where) {
   if (iter.whatToShow !== SHOW_TEXT) {
-    throw new DOMException(E_SHOW, 'InvalidStateError');
+    throw new DOMException(E_SHOW, 'InvalidStateError')
   }
 
   let count = 0
@@ -26,14 +26,14 @@ export default function seek(iter, where) {
     let backward = () => node != where || !iter.pointerBeforeReferenceNode
     predicates = {forward, backward}
   } else {
-    throw new TypeError(E_WHERE);
+    throw new TypeError(E_WHERE)
   }
 
   while (predicates.forward()) {
-    node = iter.nextNode();
+    node = iter.nextNode()
 
     if (node === null) {
-      throw new DOMException(E_END, 'IndexSizeError');
+      throw new DOMException(E_END, 'IndexSizeError')
     }
 
     count += node.nodeValue.length
@@ -44,10 +44,10 @@ export default function seek(iter, where) {
   }
 
   while (predicates.backward()) {
-    node = iter.previousNode();
+    node = iter.previousNode()
 
     if (node === null) {
-      throw new DOMException(E_END, 'IndexSizeError');
+      throw new DOMException(E_END, 'IndexSizeError')
     }
 
     count -= node.nodeValue.length

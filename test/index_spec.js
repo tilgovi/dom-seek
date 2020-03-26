@@ -23,10 +23,10 @@ describe('seek', function () {
     })
 
     it('must refer to a root node with text content', function () {
-      let document = fixture.el.ownerDocument;
-      let root = document.createElement('div');
+      let document = fixture.el.ownerDocument
+      let root = document.createElement('div')
       let iter = createNodeIterator(root, SHOW_TEXT)
-      assert.throws(() => seek(iter, 0), /exhausted/);
+      assert.throws(() => seek(iter, 0), /exhausted/)
     })
   })
 
@@ -59,7 +59,7 @@ describe('seek', function () {
     it('accepts zero as an argument', function () {
       let iter = createNodeIterator(fixture.el, SHOW_TEXT)
       let p = fixture.el.childNodes[0]
-      let node = p.childNodes[0].childNodes[0];
+      let node = p.childNodes[0].childNodes[0]
       assert.doesNotThrow(() => seek(iter, 0))
       assert.strictEqual(iter.referenceNode, node)
       assert.isTrue(iter.pointerBeforeReferenceNode)
@@ -113,7 +113,7 @@ describe('seek', function () {
       assert.equal(iter.referenceNode.nodeValue, text)
       assert.isTrue(iter.pointerBeforeReferenceNode)
 
-      iter.nextNode();
+      iter.nextNode()
 
       let count = seek(iter, -(text.length - 3))
       assert.equal(count, -text.length)
@@ -143,7 +143,7 @@ describe('seek', function () {
       iter.nextNode()
       seek(iter, -text.length)
       assert.equal(iter.referenceNode, node)
-    });
+    })
   })
 
   describe('to a node', function () {
