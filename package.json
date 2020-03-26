@@ -38,7 +38,7 @@
     "browserify": "^13.0.0",
     "codecov.io": "^0.1.6",
     "dom-node-iterator": "^3.5.0",
-    "eslint": "^3.3.1",
+    "eslint": "^6.8.0",
     "karma": "^1.2.0",
     "karma-browserify": "^5.0.1",
     "karma-coverage": "^1.1.1",
