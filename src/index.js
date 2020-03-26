@@ -9,7 +9,19 @@ const TEXT_NODE = 3
 
 export default function seek(iter, where) {
   if (iter.whatToShow !== SHOW_TEXT) {
-    throw new DOMException(E_SHOW, 'InvalidStateError')
+    let error
+
+    // istanbul ignore next
+    try {
+      error = new DOMException(E_SHOW, 'InvalidStateError')
+    } catch {
+      error = new Error(E_SHOW);
+      error.code = 11
+      error.name = 'InvalidStateError'
+      error.toString = () => `InvalidStateError: ${E_SHOW}`
+    }
+
+    throw error
   }
 
   let count = 0
@@ -33,7 +45,7 @@ export default function seek(iter, where) {
     node = iter.nextNode()
 
     if (node === null) {
-      throw new DOMException(E_END, 'IndexSizeError')
+      throw new RangeError(E_END)
     }
 
     count += node.nodeValue.length
@@ -47,7 +59,7 @@ export default function seek(iter, where) {
     node = iter.previousNode()
 
     if (node === null) {
-      throw new DOMException(E_END, 'IndexSizeError')
+      throw new RangeError(E_END)
     }
 
     count -= node.nodeValue.length
@@ -71,18 +83,3 @@ function isText(node) {
 function before(ref, node) {
   return ref.compareDocumentPosition(node) & DOCUMENT_POSITION_PRECEDING
 }
-
-
-function DOMException(message, name) {
-  this.message = message
-  this.stack = (new Error()).stack
-  this.name = name
-  this.code = {
-    IndexSizeError: 1,
-    InvalidStateError: 11,
-  }[name]
-  this.toString = function () {
-    return name + ': ' + message
-  }
-}
-DOMException.prototype = new Error

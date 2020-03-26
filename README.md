@@ -29,6 +29,9 @@ Usage
 Adjust the position of a [`NodeIterator`] by an offset measured in text code
 units or to the position immediately before a target node.
 
+If the `whatToShow` attribute of `iter` is any value other than
+`NodeFilter.SHOW_TEXT`, throw an `InvalidStateError` `DOMException`.
+
 If `where` is a positive integer, seek the iterator forward until the sum of
 the text code unit lengths of all nodes that the iterator traverses is as close
 as possible to `where` without exceeding it.
@@ -40,19 +43,19 @@ as possible to the positive value of `where` without exceeding it.
 If `where` is a node, seek the iterator forward or backward until its pointer is
 positioned immediately before the target node.
 
+If `where` is any other value, throw a `TypeError` exception.
+
 Return the number of text code units between the initial and final iterator
 positions. This number will be negative when the traversal causes the iterator
 to traverse backward in document order.
+
+If the `where` argument specifies a target beyond the bounds of the `root`
+attribute of the iterator, throw a `RangError` exception.
 
 After this function returns, the `pointerBeforeReferencNode` property of the
 iterator should be `true`. The function may return a value less than `where` if
 returning `where` exactly would result in the iterator pointing after the last
 text node that its root node contains.
-
-Raise `InvalidStateError` when the root node of the iterator contains no text,
-the `whatToShow` property of the iterator is not `NodeFilter.SHOW_TEXT`, or when
-the `where` argument specifies a traversal beyond the bounds of the root node of
-the iterator.
 
 [`NodeIterator`]: https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator
 

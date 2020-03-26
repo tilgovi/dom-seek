@@ -53,7 +53,7 @@
   },
   "eslintConfig": {
     "env": {
-      "commonjs": true
+      "browser": true
     },
     "extends": "eslint:recommended",
     "parser": "babel-eslint",
