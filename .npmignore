@@ -2,6 +2,5 @@
 .nyc_output
 .travis.yml
 coverage
-karma.conf.js
 src
 test
