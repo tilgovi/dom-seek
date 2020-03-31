@@ -65,6 +65,10 @@ export default function seek(iter, where) {
     count -= node.nodeValue.length
   }
 
+  if (!isText(iter.referenceNode)) {
+    throw new RangeError(E_END);
+  }
+
   return count
 }
 
