@@ -35,7 +35,7 @@ export default function seek(iter, where) {
     }
   } else if (isText(where)) {
     let forward = before(node, where) ? () => false : () => node !== where
-    let backward = () => node != where || !iter.pointerBeforeReferenceNode
+    let backward = () => node !== where || !iter.pointerBeforeReferenceNode
     predicates = {forward, backward}
   } else {
     throw new TypeError(E_WHERE)
