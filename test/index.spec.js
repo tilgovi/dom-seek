@@ -1,7 +1,6 @@
 import { assert } from 'chai'
 import fs from 'fs'
 import path from 'path'
-import createNodeIterator from 'dom-node-iterator'
 import seek from '../src'
 
 const SHOW_TEXT = 4
@@ -27,45 +26,44 @@ describe('seek', function () {
 
   describe('argument 1', function () {
     it('must use `NodeFilter.SHOW_TEXT`', function () {
-      let iter = createNodeIterator(fixture.el, 0xFFFFFFFF)
+      let iter = document.createNodeIterator(fixture.el, 0xFFFFFFFF)
       assert.throws(() => seek(iter, 0), /NodeFilter.SHOW_TEXT/)
     })
 
     it('must refer to a root node with text content', function () {
-      let document = fixture.el.ownerDocument
       let root = document.createElement('div')
-      let iter = createNodeIterator(root, SHOW_TEXT)
+      let iter = document.createNodeIterator(root, SHOW_TEXT)
       assert.throws(() => seek(iter, 0), /exhausted/)
     })
   })
 
   describe('argument 2', function () {
     it('can be an integer', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       assert.doesNotThrow(() => seek(iter, 0))
     })
 
     it('can not be any other number', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       assert.throws(() => seek(iter, 5.2))
       assert.throws(() => seek(iter, NaN))
       assert.throws(() => seek(iter, Infinity))
     })
 
     it('can be a `Text` node', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       let node = iter.nextNode()
       assert.doesNotThrow(() => seek(iter, node))
     })
 
     it('cannot be any other type of node', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       iter.nextNode()
       assert.throws(() => seek(iter, document.body))
     })
 
     it('cannot be anything else', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       iter.nextNode()
       assert.throws(() => seek(iter, 'bogus'), TypeError)
     })
@@ -73,7 +71,7 @@ describe('seek', function () {
 
   describe('by a number', function () {
     it('accepts zero as an argument', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       let p = fixture.el.childNodes[0]
       let node = p.childNodes[0].childNodes[0]
       assert.doesNotThrow(() => seek(iter, 0))
@@ -82,17 +80,17 @@ describe('seek', function () {
     })
 
     it('stops when traversing past the beginning', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       assert.throws(() => seek(iter, -100), /exhausted/)
     })
 
     it('stops when traversing past the end', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       assert.throws(() => seek(iter, fixtureText.length + 100), /exhausted/)
     })
 
     it('seeks to the start of a node', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       let text = 'Aenean ultricies mi vitae est.'
       let offset = fixtureText.indexOf(text)
       let count = seek(iter, offset)
@@ -102,7 +100,7 @@ describe('seek', function () {
     })
 
     it('seeks to the nearest node', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       let text = 'Aenean ultricies mi vitae est.'
       let offset = fixtureText.indexOf(text)
       let count = seek(iter, offset + 5)
@@ -112,7 +110,7 @@ describe('seek', function () {
     })
 
     it('seeks to the last node', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       let text = ' in turpis pulvinar facilisis. Ut\n  felis.'
       let count = seek(iter, fixtureText.length)
       assert.equal(count, fixtureText.length - text.length)
@@ -120,7 +118,7 @@ describe('seek', function () {
     })
 
     it('seeks forwards and backwards', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       let text = 'commodo vitae'
       let offset = fixtureText.indexOf(text)
 
@@ -138,7 +136,7 @@ describe('seek', function () {
     })
 
     it('seeks from after the iterator reference node', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       let text = 'Aenean ultricies mi vitae est.'
       let offset = fixtureText.indexOf(text)
       let count = seek(iter, offset)
@@ -164,7 +162,7 @@ describe('seek', function () {
 
   describe('to a node', function () {
     it('seeks to the given node', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       let node = fixture.el.getElementsByTagName('code')[0].childNodes[0]
       let offset = fixtureText.indexOf(node.nodeValue)
       let count = seek(iter, node)
@@ -174,7 +172,7 @@ describe('seek', function () {
     })
 
     it('seeks forwards and backwards', function () {
-      let iter = createNodeIterator(fixture.el, SHOW_TEXT)
+      let iter = document.createNodeIterator(fixture.el, SHOW_TEXT)
       let code = fixture.el.getElementsByTagName('code')[0].childNodes[0]
       let strong = fixture.el.getElementsByTagName('strong')[0].childNodes[0]
       seek(iter, code)
